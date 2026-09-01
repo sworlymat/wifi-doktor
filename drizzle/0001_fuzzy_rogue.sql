@@ -1,0 +1,1 @@
+ALTER TABLE `orders` ADD `clickup_task_id` text;

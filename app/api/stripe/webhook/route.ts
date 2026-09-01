@@ -1,7 +1,8 @@
 import Stripe from "stripe";
-import { sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { getDb } from "../../../../db";
 import { orders } from "../../../../db/schema";
+import { createClickUpOrderTask } from "../../../../lib/clickup";
 import { getStripeClient } from "../../../../lib/stripe";
 
 export const runtime = "nodejs";
@@ -34,7 +35,8 @@ export async function POST(request: Request) {
         updatedAt: sql<string>`CURRENT_TIMESTAMP`,
       };
 
-      await getDb().insert(orders).values(values).onConflictDoUpdate({
+      const db = getDb();
+      await db.insert(orders).values(values).onConflictDoUpdate({
         target: orders.checkoutSessionId,
         set: {
           status: values.status,
@@ -47,6 +49,28 @@ export async function POST(request: Request) {
           updatedAt: values.updatedAt,
         },
       });
+
+      const [order] = await db
+        .select({ clickupTaskId: orders.clickupTaskId })
+        .from(orders)
+        .where(eq(orders.checkoutSessionId, session.id))
+        .limit(1);
+
+      if (!order?.clickupTaskId) {
+        const clickupTaskId = await createClickUpOrderTask({
+          checkoutSessionId: session.id,
+          customerEmail: values.customerEmail,
+          amountTotal: values.amountTotal,
+          currency: values.currency,
+        });
+
+        if (clickupTaskId) {
+          await db
+            .update(orders)
+            .set({ clickupTaskId, updatedAt: sql<string>`CURRENT_TIMESTAMP` })
+            .where(eq(orders.checkoutSessionId, session.id));
+        }
+      }
     }
   }
   return Response.json({ received: true });

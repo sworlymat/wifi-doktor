@@ -10,6 +10,7 @@ export const orders = sqliteTable("orders", {
   customerEmail: text("customer_email"),
   stripeCustomerId: text("stripe_customer_id"),
   paymentIntentId: text("payment_intent_id"),
+  clickupTaskId: text("clickup_task_id"),
   createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
   paidAt: text("paid_at"),
