@@ -3,6 +3,7 @@ import { eq, sql } from "drizzle-orm";
 import { getDb } from "../../../../db";
 import { orders } from "../../../../db/schema";
 import { createClickUpOrderTask } from "../../../../lib/clickup";
+import { sendOrderEmail } from "../../../../lib/email";
 import { getStripeClient } from "../../../../lib/stripe";
 
 export const runtime = "nodejs";
@@ -51,7 +52,7 @@ export async function POST(request: Request) {
       });
 
       const [order] = await db
-        .select({ clickupTaskId: orders.clickupTaskId })
+        .select({ clickupTaskId: orders.clickupTaskId, orderEmailSentAt: orders.orderEmailSentAt })
         .from(orders)
         .where(eq(orders.checkoutSessionId, session.id))
         .limit(1);
@@ -70,6 +71,16 @@ export async function POST(request: Request) {
             .set({ clickupTaskId, updatedAt: sql<string>`CURRENT_TIMESTAMP` })
             .where(eq(orders.checkoutSessionId, session.id));
         }
+      }
+
+      if (values.customerEmail && !order?.orderEmailSentAt) {
+        const origin = new URL(request.url).origin;
+        const sent = await sendOrderEmail({
+          to: values.customerEmail,
+          accessUrl: `${origin}/pruvodce?session_id=${encodeURIComponent(session.id)}`,
+          checkoutSessionId: session.id,
+        });
+        if (sent) await db.update(orders).set({orderEmailSentAt:sql<string>`CURRENT_TIMESTAMP`,updatedAt:sql<string>`CURRENT_TIMESTAMP`}).where(eq(orders.checkoutSessionId,session.id));
       }
     }
   }

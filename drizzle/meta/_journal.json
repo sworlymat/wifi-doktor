@@ -15,6 +15,13 @@
       "when": 1788297570771,
       "tag": "0001_fuzzy_rogue",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1788297941059,
+      "tag": "0002_open_crystal",
+      "breakpoints": true
     }
   ]
 }

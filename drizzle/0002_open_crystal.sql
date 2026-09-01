@@ -1,0 +1,1 @@
+ALTER TABLE `orders` ADD `order_email_sent_at` text;
