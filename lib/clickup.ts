@@ -17,6 +17,7 @@ export async function createClickUpOrderTask(order: PaidOrder) {
 
   const response = await fetch(`https://api.clickup.com/api/v2/list/${listId}/task`, {
     method: "POST",
+    signal: AbortSignal.timeout(10000),
     headers: {
       Authorization: token,
       "Content-Type": "application/json",

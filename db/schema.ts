@@ -12,6 +12,7 @@ export const orders = sqliteTable("orders", {
   paymentIntentId: text("payment_intent_id"),
   clickupTaskId: text("clickup_task_id"),
   orderEmailSentAt: text("order_email_sent_at"),
+  fulfillmentLease: text("fulfillment_lease"),
   createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
   paidAt: text("paid_at"),

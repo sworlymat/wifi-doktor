@@ -1,6 +1,7 @@
 import { getStripeClient } from "../../../lib/stripe";
 import { getDb } from "../../../db";
 import { orders } from "../../../db/schema";
+import { SITE_ORIGIN } from "../../../lib/site";
 
 export const runtime = "nodejs";
 
@@ -12,7 +13,9 @@ function integrationIdentifier() {
 }
 
 export async function POST(request: Request) {
-  const origin = new URL(request.url).origin;
+  const origin = SITE_ORIGIN;
+  const source = request.headers.get("origin");
+  if (source && source !== new URL(request.url).origin) return new Response("Forbidden", { status: 403 });
   try {
     const session = await getStripeClient().checkout.sessions.create({
       mode: "payment",
@@ -45,9 +48,7 @@ export async function POST(request: Request) {
     }).onConflictDoNothing();
     return Response.redirect(session.url, 303);
   } catch (error) {
-    console.error("Unable to create Stripe Checkout Session", {
-      message: error instanceof Error ? error.message : "Unknown error",
-    });
+    console.error("Unable to create Stripe Checkout Session", { type: error instanceof Error ? error.name : "Unknown error" });
     return Response.redirect(`${origin}/?checkout=error#objednat`, 303);
   }
 }

@@ -40,7 +40,15 @@ const worker = {
       }, allowedWidths);
     }
 
-    return handler.fetch(request, env, ctx);
+    const response = await handler.fetch(request, env, ctx);
+    const secured = new Response(response.body, response);
+    secured.headers.set("Referrer-Policy", "no-referrer");
+    secured.headers.set("X-Content-Type-Options", "nosniff");
+    if (url.pathname === "/pruvodce" || url.pathname.startsWith("/objednavka/") || url.pathname.startsWith("/api/")) {
+      secured.headers.set("Cache-Control", "private, no-store");
+      secured.headers.set("X-Robots-Tag", "noindex, nofollow");
+    }
+    return secured;
   },
 };
 

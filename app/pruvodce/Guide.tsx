@@ -35,7 +35,7 @@ const paths = {
     intro: "Když ostatní zařízení fungují, router většinou není hlavní příčina.",
     steps: [
       ["Vypněte a zapněte Wi‑Fi", "Na problematickém zařízení Wi‑Fi vypněte, počkejte 10 sekund a znovu ji zapněte.", "Ověřte načtením jedné běžné webové stránky."],
-      ["Zapomeňte síť", "V nastavení Wi‑Fi zvolte vaši síť, klepněte na Zapomenout a připojte se znovu heslem.", "Tím se odstraní chybné uložené nastavení připojení."],
+      ["Zapomeňte síť", "Nejprve si ověřte, že znáte heslo své Wi‑Fi. Pokud ho nemáte, tento krok přeskočte. Pak v nastavení Wi‑Fi zvolte svou síť, klepněte na Zapomenout a znovu se připojte heslem.", "Tím se odstraní chybné uložené nastavení. U firemní nebo školní sítě se nejprve obraťte na správce."],
       ["Restartujte zařízení", "Zařízení úplně restartujte, nejen zamkněte obrazovku.", "Pokud problém přetrvá jen zde, zkontrolujte aktualizace systému nebo servis zařízení."]
     ]
   }
@@ -46,7 +46,9 @@ type PathKey = keyof typeof paths;
 export default function Guide() {
   const [path, setPath] = useState<PathKey | null>(null);
   const [step, setStep] = useState(0);
+  const [solved, setSolved] = useState(false);
   const selected = path ? paths[path] : null;
+  if (solved) return <section className="guidePanel"><h1>Wi‑Fi zase funguje.</h1><p className="guideIntro">Další změny už nejsou potřeba. Ověřte ještě připojení na místě, kde problém vznikal.</p><button className="primary" onClick={() => {setSolved(false);setPath(null);setStep(0);}}>Vyřešit jiný problém →</button></section>;
 
   if (!selected) return <section className="guidePanel">
     <p className="eyebrow"><span/> Začněte svým problémem</p>
@@ -54,7 +56,7 @@ export default function Guide() {
     <div className="guideChoices">
       {Object.entries(paths).map(([key, value]) => <button key={key} onClick={() => {setPath(key as PathKey); setStep(0);}}>{value.title}<span>→</span></button>)}
     </div>
-    <p className="safeBox">Průvodce se k routeru nepřipojuje a nic nemění automaticky.</p>
+    <p className="safeBox">Průvodce se k routeru nepřipojuje a nic nemění automaticky. Při restartu se připojení na chvíli přeruší. Nechte tuto kartu otevřenou; při potížích použijte mobilní data. Nedržte tlačítko RESET — vymazalo by nastavení routeru.</p>
   </section>;
 
   const current = selected.steps[step];
@@ -67,8 +69,10 @@ export default function Guide() {
     <div className="verify"><b>JAK OVĚŘIT VÝSLEDEK</b><p>{current[2]}</p></div>
     <div className="guideProgress"><span>Krok {step + 1} z {selected.steps.length}</span><i><b style={{width:`${((step + 1) / selected.steps.length) * 100}%`}}/></i></div>
     <div className="guideActions">
+      <button className="secondary" onClick={() => setSolved(true)}>Už to funguje</button>
       {step > 0 && <button className="secondary" onClick={() => setStep(step - 1)}>Zpět</button>}
       {step < selected.steps.length - 1 ? <button className="primary" onClick={() => setStep(step + 1)}>Hotovo, další krok →</button> : <button className="primary" onClick={() => setPath(null)}>Vyřešit jiný problém →</button>}
     </div>
+    {step === selected.steps.length - 1 && <p className="safeBox">Pokud problém trvá, poznamenejte si, na kterých zařízeních a místech se projevuje, a kontaktujte poskytovatele internetu nebo technika. Neprovádějte tovární reset bez znalosti nastavení přípojky.</p>}
   </section>;
 }

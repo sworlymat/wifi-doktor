@@ -2,11 +2,11 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-async function render() {
+async function render(path = "/") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
   workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
   const { default: worker } = await import(workerUrl.href);
-  return worker.fetch(new Request("http://localhost/", { headers: { accept: "text/html" } }), {
+  return worker.fetch(new Request("http://localhost" + path, { headers: { accept: "text/html" } }), {
     ASSETS: { fetch: async () => new Response("Not found", { status: 404 }) },
   }, { waitUntil() {}, passThroughOnException() {} });
 }
@@ -22,6 +22,26 @@ test("server-renders the Wi-Fi Doktor sales page and Stripe checkout form", asyn
   assert.match(html, /Koupit bezpečně přes Stripe/);
   assert.match(html, /299/);
   assert.doesNotMatch(html, /sk_(test|live)_|rk_(test|live)_/);
+});
+
+test("all public pages render; private guide is denied without payment and is not cached", async () => {
+  for (const path of ["/obchodni-podminky", "/ochrana-soukromi", "/pruvodce", "/objednavka/uspech"]) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    assert.equal(response.headers.get("referrer-policy"), "no-referrer");
+    const html = await response.text();
+    assert.match(html, /Wi.?Fi Doktor/);
+    if (path === "/pruvodce") {
+      assert.equal(response.headers.get("cache-control"), "private, no-store");
+      assert.doesNotMatch(html, /Co vaše Wi.Fi právě dělá/);
+      assert.match(html, /Průvodce je pro zákazníky/);
+    }
+  }
+});
+
+test("cancelled and failed checkout show an explanation instead of silently returning home", async () => {
+  assert.match(await (await render("/?checkout=error")).text(), /Platbu se nepodařilo připravit/);
+  assert.match(await (await render("/?checkout=cancelled")).text(), /Platba byla přerušena/);
 });
 
 test("checkout keeps price and credentials server-side", async () => {
