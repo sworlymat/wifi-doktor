@@ -5,6 +5,17 @@ import { SITE_ORIGIN } from "../../../lib/site";
 
 export const runtime = "nodejs";
 
+function isAllowedCheckoutOrigin(request: Request) {
+  const source = request.headers.get("origin");
+  if (!source || source === new URL(request.url).origin) return true;
+
+  // Some embedded browsers use an opaque origin for a same-site form navigation.
+  return source === "null"
+    && request.headers.get("sec-fetch-site") === "same-origin"
+    && request.headers.get("sec-fetch-mode") === "navigate"
+    && request.headers.get("sec-fetch-dest") === "document";
+}
+
 function integrationIdentifier() {
   const suffix = Array.from(crypto.getRandomValues(new Uint8Array(8)), (value) =>
     String.fromCharCode(97 + (value % 26)),
@@ -14,8 +25,7 @@ function integrationIdentifier() {
 
 export async function POST(request: Request) {
   const origin = SITE_ORIGIN;
-  const source = request.headers.get("origin");
-  if (source && source !== new URL(request.url).origin) return new Response("Forbidden", { status: 403 });
+  if (!isAllowedCheckoutOrigin(request)) return new Response("Forbidden", { status: 403 });
   try {
     const session = await getStripeClient().checkout.sessions.create({
       mode: "payment",
