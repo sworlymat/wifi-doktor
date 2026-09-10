@@ -1,6 +1,6 @@
 @import "tailwindcss";
 .checkoutNotice{padding:16px;background:#fff5d9;color:#614c18;border-radius:10px;font-size:16px;line-height:1.5}
-.mockBody .mockOption{font-size:14px;font-weight:700;border:1px solid #dce2de;border-radius:11px;padding:15px;margin-bottom:10px;display:flex;justify-content:space-between}
+.mockBody .mockOption{font-size:14px;font-weight:700;border:1px solid #dce2de;border-radius:11px;padding:15px;margin-bottom:10px;display:flex;justify-content:space-between;cursor:pointer;transition:border-color .18s,background .18s,transform .18s}.mockBody .mockOption:hover,.mockBody .mockOption:focus-visible{border-color:var(--green);background:#f2fbf7;transform:translateX(3px);outline:none}.stepPill{border:0;font:inherit;cursor:pointer}.stepPill:hover,.stepPill:focus-visible{background:#dff5ea;color:#157b55;outline:2px solid #bce9d3;outline-offset:2px}.mockProgress i{transition:width .3s ease}.mockResult>p{color:var(--muted);font-size:14px;line-height:1.6;margin-bottom:22px}.mockCta{width:100%;background:var(--ink);color:#fff;border-radius:11px;padding:15px;display:flex;justify-content:space-between;font-size:14px;font-weight:800}.mockCta:hover,.mockCta:focus-visible{background:#22352f;outline:2px solid var(--green);outline-offset:2px}
 .guidePanel .guideActions{flex-wrap:wrap}
 .resultCard strong{overflow-wrap:anywhere}
 a:focus-visible,button:focus-visible{outline:3px solid #1c9b6b;outline-offset:4px}
