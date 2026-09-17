@@ -25,6 +25,8 @@ test("server-renders the Wi-Fi Doktor sales page and Stripe checkout form", asyn
   assert.match(html, /Co přesně po zaplacení dostanu/);
   assert.match(html, /Jak rychle získám přístup/);
   assert.match(html, /žádná další pravidelná platba se nestrhává/);
+  assert.match(html, /14 dní na vyzkoušení/);
+  assert.match(html, /14denní garance vrácení peněz/);
   assert.doesNotMatch(html, /sk_(test|live)_|rk_(test|live)_/);
 });
 
@@ -39,6 +41,10 @@ test("all public pages render; private guide is denied without payment and is no
       assert.equal(response.headers.get("cache-control"), "private, no-store");
       assert.doesNotMatch(html, /Co vaše Wi.Fi právě dělá/);
       assert.match(html, /Průvodce je pro zákazníky/);
+    }
+    if (path === "/obchodni-podminky") {
+      assert.match(html, /Dobrovolná 14denní garance vrácení peněz/);
+      assert.match(html, /nejpozději\s+do 14 dnů od obdržení žádosti/);
     }
   }
 });

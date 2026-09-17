@@ -17,3 +17,7 @@ a:focus-visible,button:focus-visible{outline:3px solid #1c9b6b;outline-offset:4p
 .faqItem h3{font-size:19px;line-height:1.35;margin:0 0 10px}
 .faqItem p{line-height:1.65;padding:0 40px 0 0}
 @media(max-width:650px){.faqItem p{padding-right:0}}
+.guarantee{display:flex;align-items:center;gap:14px;margin:0 0 20px;padding:14px;border:1px solid #b7e5d1;border-radius:12px;background:#eef9f3}
+.guarantee>span{display:grid;place-items:center;flex:0 0 46px;height:46px;border-radius:50%;background:var(--green);color:#fff;font-size:18px;font-weight:900}
+.guarantee p{margin:0;color:var(--muted);font-size:14px;line-height:1.45}
+.guarantee strong{display:block;color:var(--ink);font-size:15px;margin-bottom:2px}

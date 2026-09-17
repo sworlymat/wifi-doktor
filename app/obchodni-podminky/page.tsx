@@ -49,6 +49,20 @@ export default function Terms() {
           na práva spotřebitele, která mu přiznávají právní předpisy.
         </p>
 
+        <h2>Dobrovolná 14denní garance vrácení peněz</h2>
+        <p>
+          Nad rámec zákonných práv poskytuje prodávající zákazníkovi dobrovolnou
+          garanci spokojenosti. Pokud zákazník do 14 dnů od zaplacení zjistí, že mu
+          Wi‑Fi Doktor nevyhovuje, může z e-mailové adresy použité při objednávce napsat
+          na <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> a požádat o vrácení
+          peněz. Důvod uvádět nemusí; pro dohledání platby stačí e-mail použitý při nákupu
+          nebo identifikace objednávky. Po ověření objednávky prodávající vrátí celou
+          uhrazenou cenu stejnou platební metodou, a to bez zbytečného odkladu, nejpozději
+          do 14 dnů od obdržení žádosti. Tato dobrovolná garance nijak neomezuje zákonná
+          práva spotřebitele, zejména práva z vadného plnění ani případné právo na
+          odstoupení od smlouvy.
+        </p>
+
         <h2>Odpovědnost</h2>
         <p>
           Průvodce poskytuje bezpečné diagnostické postupy, ale nemůže zaručit odstranění
@@ -73,7 +87,7 @@ export default function Terms() {
           <a href="https://coi.gov.cz/informace-o-adr/"> coi.gov.cz/informace-o-adr/</a>.
         </p>
 
-        <p>Tyto podmínky jsou účinné od 8. září 2026.</p>
+        <p>Tyto podmínky jsou účinné od 17. září 2026.</p>
       </article>
     </main>
   );
