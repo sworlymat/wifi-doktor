@@ -21,6 +21,12 @@ test("server-renders the Wi-Fi Doktor sales page and Stripe checkout form", asyn
   assert.match(html, /action="\/api\/checkout" method="post"/);
   assert.match(html, /Koupit bezpečně přes Stripe/);
   assert.match(html, /299/);
+  assert.match(html, /Vše důležité bez rozklikávání/);
+  assert.match(html, /Co přesně po zaplacení dostanu/);
+  assert.match(html, /Jak rychle získám přístup/);
+  assert.match(html, /žádná další pravidelná platba se nestrhává/);
+  assert.match(html, /14 dní na vyzkoušení/);
+  assert.match(html, /14denní garance vrácení peněz/);
   assert.doesNotMatch(html, /sk_(test|live)_|rk_(test|live)_/);
 });
 
@@ -35,6 +41,10 @@ test("all public pages render; private guide is denied without payment and is no
       assert.equal(response.headers.get("cache-control"), "private, no-store");
       assert.doesNotMatch(html, /Co vaše Wi.Fi právě dělá/);
       assert.match(html, /Průvodce je pro zákazníky/);
+    }
+    if (path === "/obchodni-podminky") {
+      assert.match(html, /Dobrovolná 14denní garance vrácení peněz/);
+      assert.match(html, /nejpozději\s+do 14 dnů od obdržení žádosti/);
     }
   }
 });
@@ -70,4 +80,21 @@ test("orders are persisted in D1 without card data", async () => {
   assert.match(schema, /checkout_session_id/);
   assert.doesNotMatch(schema, /card_number|card_cvc/);
   assert.equal(JSON.parse(hosting).d1, "DB");
+});
+
+test("anonymous funnel events are stored without personal or form data", async () => {
+  const [schema, endpoint, home] = await Promise.all([
+    readFile(new URL("../db/schema.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/api/analytics/route.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/Home.tsx", import.meta.url), "utf8"),
+  ]);
+  assert.match(schema, /sqliteTable\("analytics_events"/);
+  assert.match(schema, /referrer_host/);
+  assert.match(schema, /duration_ms/);
+  const analyticsSchema = schema.slice(schema.indexOf("export const analyticsEvents"));
+  assert.doesNotMatch(analyticsSchema, /ip_address|user_agent|email/);
+  assert.match(endpoint, /allowedEvents/);
+  assert.match(home, /section_view/);
+  assert.match(home, /checkout_start/);
+  assert.match(home, /page_exit/);
 });

@@ -58,7 +58,19 @@ export default function Privacy() {
           marketingové nebo reklamní sledování.
         </p>
 
-        <p>Tyto informace jsou účinné od 8. září 2026.</p>
+        <h2>Základní měření návštěvnosti</h2>
+        <p>
+          Pro zlepšování stránky evidujeme zdroj návštěvy (pouze název odkazujícího webu
+          a případné UTM označení kampaně), zobrazené části stránky, zahájení přechodu
+          k platbě, největší dosaženou hloubku stránky a přibližnou dobu návštěvy.
+          Neukládáme obsah formulářů, odpovědi z průvodce, celou adresu odkazující stránky,
+          e-mail ani IP adresu. Náhodný identifikátor návštěvy existuje jen po dobu otevření
+          stránky a neukládá se do cookies ani do místního úložiště prohlížeče. Tyto údaje
+          zpracováváme v souhrnné podobě na základě oprávněného zájmu zjistit, kde návštěvníci
+          potřebují lepší vysvětlení, a po vyhodnocení je odstraníme.
+        </p>
+
+        <p>Tyto informace jsou účinné od 16. září 2026.</p>
       </article>
     </main>
   );
