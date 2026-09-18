@@ -25,7 +25,8 @@ test("server-renders the Wi-Fi Doktor sales page and Stripe checkout form", asyn
   assert.match(html, /Co přesně po zaplacení dostanu/);
   assert.match(html, /Jak rychle získám přístup/);
   assert.match(html, /žádná další pravidelná platba se nestrhává/);
-  assert.match(html, /14 dní na vyzkoušení/);
+  assert.match(html, /100% garance vrácení peněz/);
+  assert.match(html, /KROK 1/);
   assert.match(html, /14denní garance vrácení peněz/);
   assert.doesNotMatch(html, /sk_(test|live)_|rk_(test|live)_/);
 });
