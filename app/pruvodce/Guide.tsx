@@ -2,6 +2,20 @@
 
 import { useState } from "react";
 
+const complaintTemplate = `Dobrý den,
+
+po nezávislé diagnostice domácí sítě hlásím opakovanou nestabilitu internetového připojení. Lokální Wi-Fi síť i připojená zařízení v domácnosti byly prověřeny a pracují v normě.
+
+Diagnostika ukazuje:
+• Výpadky odezvy přímo na výchozí bráně modemu
+• Packet loss vyšší než přijatelná mez při zachované funkčnosti Wi-Fi
+
+Závada se s vysokou pravděpodobností nachází na přívodní trase před účastnickým modemem.
+
+Žádám o prověření spojení na vaší straně. Vzhledem k tomu, že jde o závadu mimo moji domácí síť, žádám o řešení bez účtování poplatku za výjezd technika.
+
+Děkuji za vyřízení.`;
+
 const paths = {
   slow: {
     title: "Wi‑Fi je pomalá",
@@ -47,21 +61,34 @@ export default function Guide() {
   const [path, setPath] = useState<PathKey | null>(null);
   const [step, setStep] = useState(0);
   const [solved, setSolved] = useState(false);
+  const [showComplaint, setShowComplaint] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [showHardware, setShowHardware] = useState(false);
   const selected = path ? paths[path] : null;
-  if (solved) return <section className="guidePanel"><h1>Wi‑Fi zase funguje.</h1><p className="guideIntro">Další změny už nejsou potřeba. Ověřte ještě připojení na místě, kde problém vznikal.</p><button className="primary" onClick={() => {setSolved(false);setPath(null);setStep(0);}}>Vyřešit jiný problém →</button></section>;
+
+  const copyComplaint = () => {
+    navigator.clipboard.writeText(complaintTemplate).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    }).catch(() => {});
+  };
+
+  if (solved) return <section className="guidePanel"><h1>Wi‑Fi zase funguje.</h1><p className="guideIntro">Další změny už nejsou potřeba. Ověřte ještě připojení na místě, kde problém vznikal.</p><button className="primary" onClick={() => {setSolved(false);setPath(null);setStep(0);setShowComplaint(false);setShowHardware(false);}}>Vyřešit jiný problém →</button></section>;
 
   if (!selected) return <section className="guidePanel">
     <p className="eyebrow"><span/> Začněte svým problémem</p>
     <h1>Co vaše Wi‑Fi právě dělá?</h1>
     <div className="guideChoices">
-      {Object.entries(paths).map(([key, value]) => <button key={key} onClick={() => {setPath(key as PathKey); setStep(0);}}>{value.title}<span>→</span></button>)}
+      {Object.entries(paths).map(([key, value]) => <button key={key} onClick={() => {setPath(key as PathKey); setStep(0);setShowComplaint(false);setShowHardware(false);}}>{value.title}<span>→</span></button>)}
     </div>
     <p className="safeBox">Průvodce se k routeru nepřipojuje a nic nemění automaticky. Při restartu se připojení na chvíli přeruší. Nechte tuto kartu otevřenou; při potížích použijte mobilní data. Nedržte tlačítko RESET — vymazalo by nastavení routeru.</p>
   </section>;
 
   const current = selected.steps[step];
+  const isLastStep = step === selected.steps.length - 1;
+
   return <section className="guidePanel">
-    <button className="guideBack" onClick={() => setPath(null)}>← Změnit problém</button>
+    <button className="guideBack" onClick={() => {setPath(null);setShowComplaint(false);setShowHardware(false);}}>← Změnit problém</button>
     <p className="eyebrow"><span/> {selected.title}</p>
     <h1>{current[0]}</h1>
     <p className="guideIntro">{step === 0 ? selected.intro : "Pokračujte až po dokončení předchozího kroku."}</p>
@@ -73,6 +100,38 @@ export default function Guide() {
       {step > 0 && <button className="secondary" onClick={() => setStep(step - 1)}>Zpět</button>}
       {step < selected.steps.length - 1 ? <button className="primary" onClick={() => setStep(step + 1)}>Hotovo, další krok →</button> : <button className="primary" onClick={() => setPath(null)}>Vyřešit jiný problém →</button>}
     </div>
-    {step === selected.steps.length - 1 && <p className="safeBox">Pokud problém trvá, poznamenejte si, na kterých zařízeních a místech se projevuje, a kontaktujte poskytovatele internetu nebo technika. Neprovádějte tovární reset bez znalosti nastavení přípojky.</p>}
+    {isLastStep && <p className="safeBox">Pokud problém trvá, poznamenejte si, na kterých zařízeních a místech se projevuje, a kontaktujte poskytovatele internetu nebo technika. Neprovádějte tovární reset bez znalosti nastavení přípojky.</p>}
+    {isLastStep && <>
+      <div className="bonusSection">
+        <button className="bonusToggle" type="button" onClick={() => setShowComplaint(!showComplaint)}>
+          <span>📋 Generátor stížnosti pro operátora</span>
+          <b>{showComplaint ? "−" : "+"}</b>
+        </button>
+        {showComplaint && <div className="bonusContent">
+          <p>Pokud diagnostika ukazuje, že problém není ve vaší domácí síti, ale na přípojce operátora, zkopírujte si tento text a použijte ho při kontaktu s infolinkou nebo v reklamačním formuláři:</p>
+          <pre className="complaintText">{complaintTemplate}</pre>
+          <button className="secondary copyBtn" type="button" onClick={copyComplaint}>{copied ? "✓ Zkopírováno!" : "📋 Zkopírovat text"}</button>
+        </div>}
+      </div>
+      <div className="bonusSection">
+        <button className="bonusToggle" type="button" onClick={() => setShowHardware(!showHardware)}>
+          <span>📡 Doporučení ověřeného hardware</span>
+          <b>{showHardware ? "−" : "+"}</b>
+        </button>
+        {showHardware && <div className="bonusContent">
+          <p>Pokud je váš router opravdu zastaralý (starší než 7 let, nepodporuje 5 GHz), zde jsou dva prověřené modely podle velikosti nemovitosti:</p>
+          <div className="hwCard">
+            <b>🏠 Byt do 70 m²</b>
+            <p>Wi‑Fi 6 router s gigabitovými porty. Cenově do 1 200 Kč. Příklady: TP‑Link Archer AX23, Asus RT‑AX1800S.</p>
+          </div>
+          <div className="hwCard">
+            <b>🏡 Velký byt nebo patrový dům</b>
+            <p>Dvouprvkový Mesh systém pro eliminaci mrtvých zón. Cenově do 2 500 Kč. Příklady: TP‑Link Deco M4 (2‑pack), TP‑Link Deco X20 (2‑pack).</p>
+          </div>
+          <p className="hwNote">Tyto modely jsou ověřené a dostupné v českých e‑shopech (Alza, CZC). Nekupujte zbytečně drahý router — pro domácnost za 4 000 Kč+ nedostanete o tolik lepší pokrytí.</p>
+        </div>}
+      </div>
+    </>}
   </section>;
 }
+
