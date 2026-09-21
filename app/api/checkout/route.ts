@@ -36,7 +36,7 @@ export async function POST(request: Request) {
           unit_amount: 29900,
           product_data: {
             name: "Wi-Fi Doktor",
-            description: "Jednorázový přístup k interaktivnímu průvodci domácí Wi-Fi",
+            description: "Doživotní přístup k průvodci domácí Wi-Fi. Přístup ihned po zaplacení, odkaz také na e-mail.",
           },
         },
         quantity: 1,

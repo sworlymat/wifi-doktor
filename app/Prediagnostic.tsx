@@ -87,7 +87,7 @@ export default function Prediagnostic() {
           }}>
             <button type="submit" className="primary full">Vyřešit problém s Wi-Fi Doktorem <span aria-hidden="true">→</span></button>
           </form>
-          <p className="preNote">Jednorázově · žádné předplatné · 14denní garance vrácení peněz</p>
+          <p className="preNote">Přístup ihned po zaplacení. Odkaz vám pošleme také na e-mail.</p><p className="preNote">Doživotní přístup · jednorázová platba · 14denní garance vrácení peněz</p>
           <TechnicianCTA />
         </div>
         <div className="preResultActions"><button className="preBack" type="button" onClick={() => setStep(3)}>← Upravit odpovědi</button><button className="preBack" type="button" onClick={start}>Začít znovu</button></div>
