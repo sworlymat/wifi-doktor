@@ -1,4 +1,5 @@
 import { sql } from "drizzle-orm";
+import { eventTypes } from "../lib/analytics-events";
 import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const orders = sqliteTable("orders", {
@@ -22,7 +23,7 @@ export const analyticsEvents = sqliteTable("analytics_events", {
   id: text("id").primaryKey(),
   sessionId: text("session_id").notNull(),
   eventType: text("event_type", {
-    enum: ["page_view", "section_view", "checkout_start", "page_exit"],
+    enum: eventTypes,
   }).notNull(),
   path: text("path").notNull(),
   referrerHost: text("referrer_host"),

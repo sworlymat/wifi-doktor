@@ -58,7 +58,7 @@ test("signed webhooks persist payment, retry independently and prevent concurren
   let pause=false;
   const {POST}=load("app/api/stripe/webhook/route.ts",{
     "../../../../db":{getDb:()=>db},
-    "../../../../db/schema":load("db/schema.ts"),
+    "../../../../db/schema":load("db/schema.ts",{"../lib/analytics-events":load("lib/analytics-events.ts")}),
     "../../../../lib/site":{SITE_ORIGIN:"https://wifi-doktor.com"},
     "../../../../lib/stripe":{getStripeClient:()=>stripe},
     "../../../../lib/clickup":{createClickUpOrderTask:async()=>{crmCalls++;if(crmFails)throw new Error("offline");return "task-fixture";}},

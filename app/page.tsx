@@ -1,5 +1,5 @@
 import Home from "./Home";
 export default async function Page({searchParams}:{searchParams:Promise<{checkout?:string}>}) {
   const {checkout} = await searchParams;
-  return <Home checkout={checkout}/>;
+  return <Home checkout={checkout} prediagnosticEnabled={process.env.PREDIAGNOSTIC_ENABLED !== "false"}/>;
 }

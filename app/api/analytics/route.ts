@@ -1,9 +1,10 @@
 import { getDb } from "../../../db";
 import { analyticsEvents } from "../../../db/schema";
+import { eventTypes, type AnalyticsEvent } from "../../../lib/analytics-events";
 
 export const runtime = "nodejs";
 
-const allowedEvents = new Set(["page_view", "section_view", "checkout_start", "page_exit"]);
+const allowedEvents = new Set<string>(eventTypes);
 
 function shortText(value: unknown, maxLength: number) {
   return typeof value === "string" && value.length > 0
@@ -39,7 +40,7 @@ export async function POST(request: Request) {
     await getDb().insert(analyticsEvents).values({
       id: crypto.randomUUID(),
       sessionId,
-      eventType: eventType as "page_view" | "section_view" | "checkout_start" | "page_exit",
+      eventType: eventType as AnalyticsEvent,
       path,
       referrerHost: shortText(body.referrerHost, 160),
       utmSource: shortText(body.utmSource, 120),

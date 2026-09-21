@@ -50,6 +50,21 @@ test("all public pages render; private guide is denied without payment and is no
   }
 });
 
+test("prediagnostic can be disabled without removing the original checkout", async () => {
+  const original = process.env.PREDIAGNOSTIC_ENABLED;
+  try {
+    process.env.PREDIAGNOSTIC_ENABLED = "false";
+    const disabled = await (await render()).text();
+    assert.doesNotMatch(disabled, /id="prediagnostika"/);
+    assert.match(disabled, /Koupit bezpečně přes Stripe/);
+    process.env.PREDIAGNOSTIC_ENABLED = "true";
+    assert.match(await (await render()).text(), /id="prediagnostika"/);
+  } finally {
+    if (original === undefined) delete process.env.PREDIAGNOSTIC_ENABLED;
+    else process.env.PREDIAGNOSTIC_ENABLED = original;
+  }
+});
+
 test("cancelled and failed checkout show an explanation instead of silently returning home", async () => {
   assert.match(await (await render("/?checkout=error")).text(), /Platbu se nepodařilo připravit/);
   assert.match(await (await render("/?checkout=cancelled")).text(), /Platba byla přerušena/);

@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
+import Prediagnostic from "./Prediagnostic";
+import { track } from "../lib/analytics";
 const pains=[["Wi‑Fi je pomalá","Stránky se načítají věčnost a video se seká."],["Připojení vypadává","Telefon nebo televize se pořád odpojují."],["Signál nedosáhne všude","V ložnici, patře nebo na zahradě Wi‑Fi mizí."],["Zlobí jen jedno zařízení","Ostatní fungují, ale jeden telefon či notebook ne."]];
 const steps=[["01","Vyberete, co nefunguje","Žádná učebnice. Začnete rovnou svým problémem."],["02","Projdete doporučené kontroly","Průvodce rozliší Wi‑Fi, internet, pokrytí i konkrétní zařízení."],["03","Uděláte jeden bezpečný krok","Dostanete konkrétní pokyn a popis, jak ověřit výsledek."],["04","Ověříte výsledek","Teprve když krok nepomohl, pokračujete dál."]];
 const faqs=[
@@ -24,8 +26,7 @@ const demoResults=[
 const demoQ2=["Všechna zařízení v domácnosti","Jen jedno konkrétní (telefon, TV, notebook)"];
 const demoQ3=["Do 4 let","Starší než 4 roky","Nevím"];
 const Arrow=()=> <span aria-hidden="true">↗</span>;
-export default function Home({checkout}:{checkout?:string}){const[demo,setDemo]=useState<number|null>(null);const[demoStep,setDemoStep]=useState(0);const[oneDevice,setOneDevice]=useState(false);const[routerAge,setRouterAge]=useState<number|null>(null);const resetDemo=()=>{setDemo(null);setDemoStep(0);setOneDevice(false);setRouterAge(null);};const demoResult=demoResults[oneDevice?2:demo===2?1:demo??0];const progressWidth=demoStep===0?"33%":demoStep===1?"66%":"100%";useEffect(()=>{
-  const sessionId=crypto.randomUUID();
+export default function Home({checkout,prediagnosticEnabled=true}:{checkout?:string;prediagnosticEnabled?:boolean}){const[demo,setDemo]=useState<number|null>(null);const[demoStep,setDemoStep]=useState(0);const[oneDevice,setOneDevice]=useState(false);const[routerAge,setRouterAge]=useState<number|null>(null);const resetDemo=()=>{setDemo(null);setDemoStep(0);setOneDevice(false);setRouterAge(null);};const demoResult=demoResults[oneDevice?2:demo===2?1:demo??0];const progressWidth=demoStep===0?"33%":demoStep===1?"66%":"100%";useEffect(()=>{
   const startedAt=Date.now();
   const seenSections=new Set<string>();
   let lastSection="top";
@@ -34,12 +35,8 @@ export default function Home({checkout}:{checkout?:string}){const[demo,setDemo]=
   const search=new URLSearchParams(window.location.search);
   let referrerHost:string|null=null;
   try{referrerHost=document.referrer?new URL(document.referrer).hostname:null;}catch{referrerHost=null;}
-  const send=(eventType:string,extra:Record<string,unknown>={},beacon=false)=>{
-    const payload=JSON.stringify({sessionId,eventType,path:window.location.pathname,...extra});
-    if(beacon&&navigator.sendBeacon){navigator.sendBeacon("/api/analytics",new Blob([payload],{type:"application/json"}));return;}
-    void fetch("/api/analytics",{method:"POST",headers:{"content-type":"application/json"},body:payload,keepalive:true}).catch(()=>{});
-  };
-  send("page_view",{referrerHost,utmSource:search.get("utm_source"),utmMedium:search.get("utm_medium"),utmCampaign:search.get("utm_campaign")});
+  const send=track;
+  send("page_view",{section:prediagnosticEnabled?"landing:B":"landing:A",referrerHost,utmSource:search.get("utm_source"),utmMedium:search.get("utm_medium"),utmCampaign:search.get("utm_campaign")});
   const observer=new IntersectionObserver(entries=>{for(const entry of entries){if(entry.isIntersecting&&entry.intersectionRatio>=.3){const section=(entry.target as HTMLElement).id;if(section){lastSection=section;if(!seenSections.has(section)){seenSections.add(section);send("section_view",{section});}}}}},{threshold:.3});
   for(const section of document.querySelectorAll<HTMLElement>("[data-track-section]"))observer.observe(section);
   const updateScroll=()=>{const available=document.documentElement.scrollHeight-window.innerHeight;maxScrollDepth=available<=0?100:Math.max(maxScrollDepth,Math.min(100,Math.round(window.scrollY/available*100)));};
@@ -50,10 +47,11 @@ export default function Home({checkout}:{checkout?:string}){const[demo,setDemo]=
   const sendExit=()=>{if(exitSent)return;exitSent=true;updateScroll();send("page_exit",{section:lastSection,durationMs:Date.now()-startedAt,scrollDepth:maxScrollDepth},true);};
   window.addEventListener("pagehide",sendExit);
   return()=>{observer.disconnect();window.removeEventListener("scroll",updateScroll);window.removeEventListener("pagehide",sendExit);checkoutForms.forEach(form=>form.removeEventListener("submit",checkoutStarted));};
-},[]);return <main>
+},[prediagnosticEnabled]);return <main>
 <header className="nav wrap"><a className="brand" href="#top"><span className="brandMark">W</span><span>Wi‑Fi Doktor</span></a><a className="navCta" href="#objednat">Získat průvodce <Arrow/></a></header>
 <section className="hero wrap" id="top" data-track-section><div className="heroCopy"><p className="eyebrow"><span/> Interaktivní pomoc pro domácí Wi‑Fi</p><h1>Wi‑Fi zlobí?<br/><em>Opravte ji sami.</em></h1><p className="lead">Zjistěte, proč je vaše Wi‑Fi pomalá, vypadává nebo nedosáhne všude. Bez technických znalostí. Krok za krokem.</p><div className="heroActions"><a className="primary" href="#objednat">Chci vyřešit Wi‑Fi <Arrow/></a><a className="textLink" href="#jak">Jak to funguje ↓</a></div><div className="trustRow"><span>✓ Bez instalace</span><span>✓ Lidsky vysvětlené</span><span>✓ Bez zásahu naslepo</span></div></div>
 <div className="productMock"><div className="mockTop"><span className="mockLogo">W</span><span>Diagnostika</span><button className="stepPill" type="button" onClick={resetDemo}>{demo===null&&demoStep===0?"Ukázka postupu":"Začít znovu ↺"}</button></div><div className="mockProgress"><i style={{width:progressWidth}}/></div><div className="mockBody" aria-live="polite"><span className="signal">{demoStep<3?"⌁":"✓"}</span><p className="smallLabel">{demoStep===3?"VÝSLEDEK UKÁZKY":`RYCHLÁ KONTROLA · KROK ${demoStep+1}/3`}</p>{demoStep===0&&demo===null?<><h2>Kde Wi‑Fi<br/>zlobí nejvíc?</h2>{["Jen dál od routeru","Také blízko routeru","Jen na jednom zařízení"].map((label,i)=><button className="mockOption" type="button" onClick={()=>{setDemo(i);setDemoStep(1);}} key={label}>{label} <span>→</span></button>)}<p className="safe">● Zatím nic neměníme. Nejdřív zjistíme příčinu.</p></>:demoStep===1?<><h2>Která zařízení<br/>mají problém?</h2>{demoQ2.map((label,i)=><button className="mockOption" type="button" onClick={()=>{setOneDevice(i===1);setDemoStep(2);}} key={label}>{label} <span>→</span></button>)}<p className="safe">● Krok 2 ze 3. Odpověď nás dovede k příčině.</p></>:demoStep===2?<><h2>Jak starý je<br/>váš router?</h2>{demoQ3.map((label,i)=><button className="mockOption" type="button" onClick={()=>{setRouterAge(i);setDemoStep(3);}} key={label}>{label} <span>→</span></button>)}<p className="safe">● Stáří samo o sobě neznamená, že potřebujete nový router.</p></>:<div className="mockResult"><h2>{demoResult.title}</h2><p>{demoResult.text}</p><p className="diagBadge">{routerAge===1?"U staršího routeru nejdřív ověřte umístění, podporovaná pásma a aktualizace. Výměna nemusí být nutná.":"Nejdřív ověřte příčinu. Nový router nemusí být potřeba."}</p><a className="mockCta" href="#objednat">Odemknout celý postup za 299 Kč <span>↓</span></a></div>}</div></div></section>
+{prediagnosticEnabled && <Prediagnostic/>}
 <section className="problemBand" id="problemy" data-track-section><div className="wrap"><p className="sectionKicker">Poznáváte to?</p><div className="painGrid">{pains.map(([t,b],i)=><article key={t}><b>0{i+1}</b><h3>{t}</h3><p>{b}</p></article>)}</div></div></section>
 <section className="how wrap" id="jak" data-track-section><div className="sectionHead"><p className="eyebrow"><span/> Jak to funguje</p><h2>Žádné hádání.<br/><em>Jeden krok po druhém.</em></h2><p>Wi‑Fi Doktor vás nezahltí pojmy. Podle vybraného problému ukáže konkrétní kontroly a kroky.</p></div><div className="steps">{steps.map(([n,t,b])=><article key={n}><span>{n}</span><div><h3>{t}</h3><p>{b}</p></div></article>)}</div></section>
 <section className="inside" id="obsah" data-track-section><div className="wrap insideGrid"><div><p className="eyebrow light"><span/> Co získáte</p><h2>Technikův postup.<br/><em>Normální řečí.</em></h2><p className="insideLead">U každého kroku přesně víte čtyři věci:</p><div className="formula"><span>CO</span><i>→</i><span>KDE</span><i>→</i><span>PROČ</span><i>→</i><span>OVĚŘIT</span></div></div><ul><li><b>Rozlišení příčiny</b><span>Wi‑Fi, přípojka, pokrytí nebo zařízení</span></li><li><b>Návody bez zkratek</b><span>Kam kliknout a co přesně zvolit</span></li><li><b>Bezpečné změny</b><span>Jedna úprava, jeden test, možnost návratu</span></li><li><b>Jasný další krok</b><span>I když už je potřeba poskytovatel či technik</span></li></ul></div></section>
