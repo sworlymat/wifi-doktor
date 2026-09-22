@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+export const metadata = { title: 'Ochrana soukromí | Wi-Fi Doktor', alternates: { canonical: 'https://wifi-doktor.com/ochrana-soukromi' } };
+
 const CONTACT_EMAIL = "pepik.kup@gmail.com";
 
 export default function Privacy() {

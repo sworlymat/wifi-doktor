@@ -114,3 +114,23 @@ test("anonymous funnel events are stored without personal or form data", async (
   assert.match(home, /checkout_start/);
   assert.match(home, /page_exit/);
 });
+
+test("SEO pages expose distinct canonicals and crawlable advice; private access stays noindex", async () => {
+  const paths = ["/", "/poradna/wifi-vypadava", "/poradna/slaby-signal-wifi", "/poradna/pomala-wifi", "/obchodni-podminky", "/ochrana-soukromi"];
+  for (const path of paths) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    const canonical = html.match(/<link[^>]*rel="canonical"[^>]*href="([^"]+)"/)?.[1];
+    assert.equal(new URL(canonical).href, `https://wifi-doktor.com${path}`, path);
+    if (path.startsWith("/poradna/")) {
+      assert.match(html, /application\/ld\+json/);
+      assert.match(html, /Spustit předdiagnostiku zdarma/);
+    }
+  }
+  assert.equal((await render("/poradna/neexistuje")).status, 404);
+  assert.match(await (await render("/pruvodce")).text(), /noindex/);
+  const sitemap = await readFile(new URL("../public/sitemap.xml", import.meta.url), "utf8");
+  for (const path of paths) assert.ok(sitemap.includes(`https://wifi-doktor.com${path}</loc>`));
+  assert.doesNotMatch(sitemap, /session_id|\/pruvodce|\/api\//);
+});

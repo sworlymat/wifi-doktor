@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+export const metadata = { title: 'Obchodní podmínky | Wi-Fi Doktor', alternates: { canonical: 'https://wifi-doktor.com/obchodni-podminky' } };
+
 const CONTACT_EMAIL = "pepik.kup@gmail.com";
 
 export default function Terms() {
