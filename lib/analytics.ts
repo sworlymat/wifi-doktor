@@ -1,4 +1,5 @@
 import type { AnalyticsEvent } from "./analytics-events";
+import { googleEvent } from "./google-analytics";
 
 let pageSessionId: string | undefined;
 
@@ -6,6 +7,7 @@ let pageSessionId: string | undefined;
 // Analytics must never block a choice, a form submission or navigation.
 export function track(eventType: AnalyticsEvent, extra: Record<string, unknown> = {}, beacon = false) {
   if (typeof window === "undefined") return;
+  try { googleEvent(eventType); } catch { /* Optional analytics never blocks the existing flow. */ }
   try {
     pageSessionId ??= crypto.randomUUID();
     const payload = JSON.stringify({ sessionId: pageSessionId, eventType, path: window.location.pathname, ...extra });
