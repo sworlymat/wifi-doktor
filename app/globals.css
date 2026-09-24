@@ -61,3 +61,85 @@ a:focus-visible,button:focus-visible{outline:3px solid #1c9b6b;outline-offset:4p
   .pricingGrid{grid-template-columns:1fr;gap:35px}
 }
 
+/* Wi-Fi Doktor Interactive Guide v0.4.1 */
+.guideRootWrap{width:min(900px,100%);margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.guideQuickBar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding:8px 4px}
+.guideBreadcrumb{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.homeBreadcrumb{background:none;border:0;color:var(--muted);font:inherit;font-weight:700;cursor:pointer;padding:4px 8px;border-radius:8px;transition:.15s}
+.homeBreadcrumb:hover{background:#e8ece9;color:var(--ink)}
+.crumbSep{color:#a4b0a9}
+.crumbCurrent{font-weight:700;color:var(--ink)}
+.guideQuickTools{display:flex;gap:8px;flex-wrap:wrap}
+.quickToolBtn{background:#fff;border:1px solid var(--line);border-radius:99px;padding:6px 14px;font:inherit;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;transition:.15s}
+.quickToolBtn:hover{border-color:var(--green);color:var(--ink);background:#f2fbf7}
+.quickToolBtn.active{border-color:var(--green);background:#e7f8ef;color:#065f46}
+
+.screenCard{background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:0 18px 60px rgba(20,32,29,.07);overflow:hidden}
+.screenTop{padding:14px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:13px;font-weight:600;background:#fafbf9}
+.screenContent{padding:clamp(22px,4vw,36px)}
+.screenContent h2{font-size:clamp(26px,4vw,34px);line-height:1.15;letter-spacing:-1.2px;margin:0 0 12px;color:var(--ink);font-weight:800}
+.screenContent .hero-sub{font-size:16px;line-height:1.6;color:var(--muted);margin-bottom:20px;max-width:720px}
+
+/* Alerts and Callouts */
+.box{border-radius:14px;padding:16px 18px;margin:16px 0;line-height:1.55;font-size:14px}
+.box.good{background:#ecfdf3;border:1px solid #abefc6;color:#067647}
+.box.tip{background:#eff4ff;border:1px solid #c7d7fe;color:#1e40af}
+.box.warn{background:#fffaeb;border:1px solid #fedf89;color:#b54708}
+.box.danger{background:#fef3f2;border:1px solid #fecdca;color:#b42318}
+.box.why{background:#f4f3ff;border:1px solid #d9d6fe;color:#5b21b6}
+
+/* Steps List */
+.stepsList{display:grid;gap:12px;margin:20px 0}
+.stepItem{position:relative;border:1px solid var(--line);border-radius:16px;padding:16px 16px 16px 58px;background:#fff;line-height:1.45;display:flex;align-items:flex-start}
+.stepNum{position:absolute;left:14px;top:14px;width:32px;height:32px;border-radius:50%;background:#eef4ff;color:#2563eb;display:grid;place-items:center;font-weight:800;font-size:14px}
+.stepBody strong{display:block;font-size:15px;color:var(--ink);margin-bottom:3px}
+.stepDesc{display:block;font-size:13px;color:var(--muted);line-height:1.45}
+
+/* Options / Pathways */
+.optionsList{display:grid;gap:12px;margin:22px 0}
+.optionBtn{display:flex;align-items:center;gap:16px;text-decoration:none;color:var(--ink);padding:16px 18px;border:1px solid var(--line);border-radius:16px;background:#fff;transition:.15s;cursor:pointer;text-align:left;font:inherit;width:100%}
+.optionBtn:hover{border-color:#1c9b6b;background:#f8fcf9;transform:translateY(-1px);box-shadow:0 4px 14px rgba(28,155,107,.1)}
+.optIcon{width:44px;height:44px;flex:none;border-radius:12px;background:#eef4ff;display:grid;place-items:center;font-size:22px}
+.optText{flex:1}
+.optText strong{display:block;font-size:15px;color:var(--ink);margin-bottom:2px}
+.optDesc{display:block;font-size:13px;color:var(--muted)}
+.optArrow{font-size:18px;color:#94a39b;font-weight:800;transition:.15s}
+.optionBtn:hover .optArrow{color:var(--green);transform:translateX(3px)}
+
+/* Mini Cards & Grid */
+.cardmini{border:1px solid var(--line);border-radius:14px;padding:16px;background:#fff}
+.cardmini strong{display:block;font-size:15px;color:var(--ink);margin-bottom:6px}
+.cardmini p{font-size:13px;color:var(--muted);line-height:1.5;margin:0}
+.kicker{text-transform:uppercase;letter-spacing:.08em;font-size:11px;font-weight:800;color:var(--muted);margin-bottom:6px}
+
+/* Tables */
+.tableWrap{overflow-x:auto;margin:16px 0}
+.screenContent table{width:100%;border-collapse:collapse}
+.screenContent td,.screenContent th{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left;font-size:14px;line-height:1.5}
+.screenContent th{color:#475467;background:#f9fafb;font-weight:700}
+.screenContent td{color:var(--muted)}
+
+/* Chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+.chip{font-size:12px;font-weight:700;padding:7px 11px;border-radius:999px;background:#ecfdf3;color:#067647;border:1px solid #bce9d3}
+
+/* Bonus Sections (Complaint & HW) */
+.bonusCardSection{margin:24px 0 16px;border:1px solid #cbd3ce;border-radius:16px;padding:22px;background:#f9faf9}
+.bonusCardHeader{display:flex;gap:14px;align-items:flex-start;margin-bottom:14px}
+.bonusCardIcon{font-size:28px;flex:none}
+.bonusCardHeader strong{display:block;font-size:16px;color:var(--ink);margin-bottom:2px}
+.complaintBox{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;font:inherit;font-size:13px;line-height:1.6;white-space:pre-wrap;word-wrap:break-word;color:var(--ink);margin:14px 0;max-height:280px;overflow-y:auto}
+.complaintActions{display:flex;gap:10px;flex-wrap:wrap}
+
+/* Screen Buttons */
+.screenNavActions{display:flex;align-items:center;gap:12px;margin-top:28px;flex-wrap:wrap}
+.btn{background:var(--ink);color:#fff;border:0;border-radius:12px;padding:14px 22px;font:inherit;font-size:15px;font-weight:800;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;justify-content:center}
+.btn:hover{background:#22352f;transform:translateY(-1px)}
+.ghost{background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:14px 20px;font:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:.15s}
+.ghost:hover{background:#f4f6f5;border-color:#b4beb8}
+.backBtn{background:#eef1f5;color:#344054;border:0;border-radius:12px;padding:14px 20px;font:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:.15s}
+.backBtn:hover{background:#e2e6eb}
+
+.guideFooter{text-align:center;color:var(--muted);font-size:12px;padding:18px 0;margin-top:10px}
+
+
