@@ -749,6 +749,7 @@ export default function Guide({ isPremium = false }: { isPremium?: boolean }) {
   const [showComplaint, setShowComplaint] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showHardware, setShowHardware] = useState(false);
+  const [showWifiman, setShowWifiman] = useState(false);
 
   // Sync hash if present on load or hash change
   useEffect(() => {
@@ -802,6 +803,88 @@ export default function Guide({ isPremium = false }: { isPremium?: boolean }) {
       .catch(() => {});
   };
 
+  const renderWifimanSection = (onClose?: () => void) => (
+    <div className="wifimanDownloadCard" id="wifiman-download">
+      <div className="wifimanDownloadHeader">
+        <span className="wifimanAppIcon">📶</span>
+        <div>
+          <div className="kicker">Doporučená aplikace pro měření signálu</div>
+          <h3>Stažení aplikace WiFiman přímo do mobilu</h3>
+          <p className="small">
+            Oficiální bezplatná aplikace od Ubiquiti Networks pro přesné měření síly signálu (dBm), zarušení kanálů a reálné rychlosti. Případné problémy s Wi‑Fi řešíme v kooperaci s touto aplikací.
+          </p>
+        </div>
+      </div>
+
+      <div className="downloadGrid">
+        <a
+          href="https://apps.apple.com/app/ubiquiti-wifiman/id1385561119"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="downloadBtnCard"
+        >
+          <span className="downloadIcon">🍏</span>
+          <div>
+            <strong>Stáhnout v App Store</strong>
+            <span>Pro iPhone a iPad (zdarma)</span>
+          </div>
+        </a>
+
+        <a
+          href="https://play.google.com/store/apps/details?id=com.ubnt.usurvey"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="downloadBtnCard"
+        >
+          <span className="downloadIcon">🤖</span>
+          <div>
+            <strong>Stáhnout na Google Play</strong>
+            <span>Pro Android telefony (zdarma)</span>
+          </div>
+        </a>
+
+        <a
+          href="https://wifiman.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="downloadBtnCard"
+        >
+          <span className="downloadIcon">🌐</span>
+          <div>
+            <strong>Otevřít wifiman.com</strong>
+            <span>Oficiální web a PC verze</span>
+          </div>
+        </a>
+      </div>
+
+      <div className="wifimanInstructionsBox">
+        <strong>Jak probíhá kooperace s technikem:</strong>
+        <ol>
+          <li>Nainstalujte si WiFiman a postavte se do místa, kde Wi‑Fi zlobí nebo vypadává.</li>
+          <li>V aplikaci spusťte test signálu (uvidíte sílu signálu v dBm i okolní sítě na stejném kanálu).</li>
+          <li>Pořiďte snímek obrazovky (screenshot) a spolu s fotografií vašeho routeru jej pošlete technikovi.</li>
+        </ol>
+        <div className="wifimanFooterActions">
+          {isPremium && (
+            <a
+              href="https://wa.me/420775278813"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn whatsappActionBtn"
+            >
+              💬 Odeslat měření technikovi na WhatsApp (+420 775 278 813)
+            </a>
+          )}
+          {onClose && (
+            <button type="button" className="ghost" onClick={onClose}>
+              Zavřít panel stažení
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="guideRootWrap">
       {/* Top tools navigation */}
@@ -849,15 +932,14 @@ export default function Guide({ isPremium = false }: { isPremium?: boolean }) {
           </button>
           {isPremium && (
             <>
-              <a
-                href="https://wifiman.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="quickToolBtn"
+              <button
+                type="button"
+                className={`quickToolBtn ${showWifiman ? "active" : ""}`}
+                onClick={() => setShowWifiman(!showWifiman)}
                 title="Aplikace pro měření Wi-Fi signálu"
               >
-                📶 WiFiman
-              </a>
+                📶 Stažení WiFiman
+              </button>
               <a
                 href="https://wa.me/420775278813"
                 target="_blank"
@@ -869,6 +951,14 @@ export default function Guide({ isPremium = false }: { isPremium?: boolean }) {
               </a>
             </>
           )}
+          <button
+            type="button"
+            className="quickToolBtn"
+            onClick={() => window.print()}
+            title="Stáhnout / Vytisknout návod do PDF"
+          >
+            🖨️ Stáhnout návod (PDF)
+          </button>
         </div>
       </div>
 
@@ -882,6 +972,10 @@ export default function Guide({ isPremium = false }: { isPremium?: boolean }) {
         <div className="screenContent">
           <h2>{current.title}</h2>
           {current.sub && <p className="hero-sub">{current.sub}</p>}
+
+          {/* WiFiman Download Section (When toggled, or on wifi-env, or for premium on start) */}
+          {(showWifiman || currentId === "wifi-env" || (isPremium && currentId === "start")) &&
+            renderWifimanSection(showWifiman ? () => setShowWifiman(false) : undefined)}
 
           {/* Primary Alert Boxes */}
           {current.boxes &&
