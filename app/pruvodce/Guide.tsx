@@ -848,15 +848,26 @@ export default function Guide({ isPremium = false }: { isPremium?: boolean }) {
             📡 Doporučený HW
           </button>
           {isPremium && (
-            <a
-              href="https://wa.me/420775278813"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="quickToolBtn whatsappToolBtn"
-              title="Osobní asistence technika na WhatsAppu"
-            >
-              💬 SOS WhatsApp (+420 775 278 813)
-            </a>
+            <>
+              <a
+                href="https://wifiman.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="quickToolBtn"
+                title="Aplikace pro měření Wi-Fi signálu"
+              >
+                📶 WiFiman
+              </a>
+              <a
+                href="https://wa.me/420775278813"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="quickToolBtn whatsappToolBtn"
+                title="Osobní asistence technika na WhatsAppu"
+              >
+                💬 SOS WhatsApp (+420 775 278 813)
+              </a>
+            </>
           )}
         </div>
       </div>
@@ -1049,17 +1060,30 @@ export default function Guide({ isPremium = false }: { isPremium?: boolean }) {
                 <span className="premiumIcon">⭐</span>
                 <div>
                   <strong>Osobní SOS asistence technika na WhatsAppu aktivní</strong>
-                  <p className="small">Máte zakoupenou verzi s asistencí. Pokud si nejste jistí nebo chcete zkontrolovat zapojení či kontrolky, pošlete fotku přímo technikovi:</p>
+                  <p className="small">Máte zakoupenou verzi s asistencí. Případné problémy řešíme v kooperaci s bezplatnou aplikací <strong><a href="https://wifiman.com" target="_blank" rel="noopener noreferrer" style={{color:"inherit",textDecoration:"underline"}}>WiFiman (wifiman.com)</a></strong>.</p>
                 </div>
               </div>
-              <a
-                href="https://wa.me/420775278813"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn whatsappActionBtn"
-              >
-                💬 Napsat technikovi na WhatsApp (+420 775 278 813)
-              </a>
+              <p className="wifimanNote">
+                📲 <strong>Jak postupovat:</strong> Změřte signál či kanály v aplikaci <a href="https://wifiman.com" target="_blank" rel="noopener noreferrer"><strong>WiFiman</strong></a> a pořiďte snímek obrazovky. Ten spolu s fotkou vašeho routeru pošlete technikovi na WhatsApp:
+              </p>
+              <div className="premiumActionsRow">
+                <a
+                  href="https://wa.me/420775278813"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn whatsappActionBtn"
+                >
+                  💬 Napsat technikovi na WhatsApp (+420 775 278 813)
+                </a>
+                <a
+                  href="https://wifiman.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ghost wifimanBtn"
+                >
+                  📶 Otevřít aplikaci WiFiman (wifiman.com) ↗
+                </a>
+              </div>
             </div>
           )}
 

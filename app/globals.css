@@ -156,5 +156,16 @@ a:focus-visible,button:focus-visible{outline:3px solid #1c9b6b;outline-offset:4p
 .premiumFooterNote{margin-top:8px;color:#065f46;font-weight:700}
 .premiumFooterNote a{color:#065f46;text-decoration:underline}
 
+/* WiFiman cooperation styles (Higher Tier) */
+.wifimanBox{background:#fff;border:1px solid #bce9d3;border-radius:12px;padding:14px 16px;margin:14px 0 16px;font-size:13px;line-height:1.5;color:#1e3a2f}
+.wifimanBox strong{color:#065f46}
+.wifimanBox a{color:#065f46;text-decoration:underline}
+.wifimanNote{font-size:13px;color:#065f46;line-height:1.55;margin:12px 0 16px}
+.wifimanNote a{color:#065f46;text-decoration:underline}
+.premiumActionsRow{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.wifimanBtn{display:inline-flex!important;align-items:center;text-decoration:none!important;border:1px solid #bce9d3!important;color:#065f46!important;background:#fff!important;padding:14px 20px;border-radius:12px;font-weight:700;transition:.15s}
+.wifimanBtn:hover{background:#ecfdf3!important;border-color:#86efac!important;transform:translateY(-1px)}
+
+
 
 

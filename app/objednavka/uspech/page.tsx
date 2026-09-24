@@ -22,15 +22,29 @@ export default async function OrderSuccess({ searchParams }: { searchParams: Pro
       {isPremium ? (
         <div className="whatsappHelpBox">
           <p><strong>📱 Vaše SOS asistence technika je aktivní</strong></p>
-          <p>Máte zakoupenou verzi s asistencí. Pokud narazíte na jakýkoliv zádrhel nebo si nebudete jistí, pošlete fotku routeru, kabelů či kontrolek přímo technikovi na WhatsApp:</p>
-          <a
-            href="https://wa.me/420775278813"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="whatsappConnectBtn"
-          >
-            💬 Otevřít WhatsApp s technikem (+420 775 278 813)
-          </a>
+          <p>Máte zakoupenou verzi s asistencí. Případné problémy s Wi‑Fi řešíme v kooperaci s bezplatnou aplikací <strong><a href="https://wifiman.com" target="_blank" rel="noopener noreferrer">WiFiman (wifiman.com)</a></strong>.</p>
+          <div className="wifimanBox">
+            <p><strong>📶 Jak postupovat při diagnostice:</strong></p>
+            <p>Stáhněte si do mobilu aplikaci <a href="https://wifiman.com" target="_blank" rel="noopener noreferrer"><strong>WiFiman</strong></a> (dostupná zdarma pro iOS i Android). Změřte v ní signál či rychlost a snímek obrazovky pošlete technikovi na WhatsApp spolu s fotkou vašeho routeru a kontrolek. Technik situaci vyhodnotí:</p>
+          </div>
+          <div className="premiumActionsRow">
+            <a
+              href="https://wa.me/420775278813"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="whatsappConnectBtn"
+            >
+              💬 Otevřít WhatsApp s technikem (+420 775 278 813)
+            </a>
+            <a
+              href="https://wifiman.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ghost wifimanBtn"
+            >
+              📶 Stáhnout aplikaci WiFiman (wifiman.com) ↗
+            </a>
+          </div>
         </div>
       ) : null}
     </> : <>
