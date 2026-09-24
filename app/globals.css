@@ -142,4 +142,19 @@ a:focus-visible,button:focus-visible{outline:3px solid #1c9b6b;outline-offset:4p
 
 .guideFooter{text-align:center;color:var(--muted);font-size:12px;padding:18px 0;margin-top:10px}
 
+/* WhatsApp & Premium Assistance styles (Higher Tier only) */
+.whatsappConnectBtn{display:inline-flex;align-items:center;gap:8px;background:#157b55;color:#fff;font-weight:800;padding:14px 22px;border-radius:12px;text-decoration:none;margin-top:12px;transition:.15s;font-size:15px}
+.whatsappConnectBtn:hover{background:#0e583d;transform:translateY(-1px);box-shadow:0 4px 14px rgba(21,123,85,.25)}
+.whatsappToolBtn{border-color:#1c9b6b!important;background:#ecfdf3!important;color:#065f46!important;font-weight:800!important}
+.whatsappToolBtn:hover{background:#d1fae5!important}
+.premiumAssistanceBox{margin:22px 0 16px;background:#f0fdf4;border:2px solid #86efac;border-radius:18px;padding:22px}
+.premiumAssistanceHeader{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px}
+.premiumIcon{font-size:24px;flex:none}
+.premiumAssistanceHeader strong{display:block;font-size:16px;color:#065f46;margin-bottom:4px}
+.whatsappActionBtn{background:#157b55!important;color:#fff!important;display:inline-flex;align-items:center;gap:8px;text-decoration:none}
+.whatsappActionBtn:hover{background:#0e583d!important;transform:translateY(-1px)}
+.premiumFooterNote{margin-top:8px;color:#065f46;font-weight:700}
+.premiumFooterNote a{color:#065f46;text-decoration:underline}
+
+
 

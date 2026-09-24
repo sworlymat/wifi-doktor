@@ -743,7 +743,7 @@ export const SCREENS: Record<string, ScreenDef> = {
   },
 };
 
-export default function Guide() {
+export default function Guide({ isPremium = false }: { isPremium?: boolean }) {
   const [currentId, setCurrentId] = useState<string>("start");
   const [history, setHistory] = useState<string[]>([]);
   const [showComplaint, setShowComplaint] = useState(false);
@@ -847,6 +847,17 @@ export default function Guide() {
           >
             📡 Doporučený HW
           </button>
+          {isPremium && (
+            <a
+              href="https://wa.me/420775278813"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="quickToolBtn whatsappToolBtn"
+              title="Osobní asistence technika na WhatsAppu"
+            >
+              💬 SOS WhatsApp (+420 775 278 813)
+            </a>
+          )}
         </div>
       </div>
 
@@ -1031,6 +1042,27 @@ export default function Guide() {
             </div>
           )}
 
+          {/* Premium Technician Assistance Box (ONLY for higher tier) */}
+          {isPremium && (
+            <div className="premiumAssistanceBox">
+              <div className="premiumAssistanceHeader">
+                <span className="premiumIcon">⭐</span>
+                <div>
+                  <strong>Osobní SOS asistence technika na WhatsAppu aktivní</strong>
+                  <p className="small">Máte zakoupenou verzi s asistencí. Pokud si nejste jistí nebo chcete zkontrolovat zapojení či kontrolky, pošlete fotku přímo technikovi:</p>
+                </div>
+              </div>
+              <a
+                href="https://wa.me/420775278813"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn whatsappActionBtn"
+              >
+                💬 Napsat technikovi na WhatsApp (+420 775 278 813)
+              </a>
+            </div>
+          )}
+
           {/* Screen Navigation Actions */}
           <div className="screenNavActions">
             {current.buttons &&
@@ -1057,6 +1089,14 @@ export default function Guide() {
       {/* Footer Info */}
       <footer className="guideFooter">
         <p>Wi‑Fi Doktor v0.4.1 · Interaktivní diagnostický systém pro domácnosti · Zakoupená plná verze</p>
+        {isPremium && (
+          <p className="premiumFooterNote">
+            ⭐ Kompletní balíček: Asistence technika na WhatsAppu:{" "}
+            <a href="https://wa.me/420775278813" target="_blank" rel="noopener noreferrer">
+              +420 775 278 813
+            </a>
+          </p>
+        )}
       </footer>
     </div>
   );
