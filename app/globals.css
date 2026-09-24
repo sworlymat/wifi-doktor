@@ -28,3 +28,36 @@ a:focus-visible,button:focus-visible{outline:3px solid #1c9b6b;outline-offset:4p
 .guarantee>span{display:grid;place-items:center;flex:0 0 46px;height:46px;border-radius:50%;background:var(--green);color:#fff;font-size:18px;font-weight:900}
 .guarantee p{margin:0;color:var(--muted);font-size:14px;line-height:1.45}
 .guarantee strong{display:block;color:var(--ink);font-size:15px;margin-bottom:2px}
+
+.preSection{padding:90px 0;display:grid;grid-template-columns:1fr 1.15fr;gap:60px;align-items:center}
+.preIntro h2{font-size:clamp(38px,4.5vw,56px);letter-spacing:-2.5px;line-height:1.05;margin:0 0 20px}
+.preIntro>p{font-size:17px;line-height:1.6;color:var(--muted);max-width:480px;margin-bottom:28px}
+.preBadges{display:flex;gap:12px;align-items:center}
+.preFree{background:var(--lime);color:var(--ink);font-weight:900;font-size:12px;letter-spacing:1px;padding:6px 12px;border-radius:6px}
+.preNoSignup{font-size:13px;color:var(--green);font-weight:700}
+.preCard{background:#fff;border:1px solid var(--line);border-radius:24px;padding:36px;box-shadow:0 20px 50px #14201d12}
+.preQuizHeader{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.quizStepNumber{font-size:12px;font-weight:800;color:var(--green)}
+.preCard h3{font-size:24px;line-height:1.25;margin:20px 0 24px;letter-spacing:-1px}
+.preOptions{display:flex;flex-direction:column;gap:10px}
+.preResult{text-align:left}
+.preResult .signal{margin-bottom:16px}
+.preResult h3{font-size:26px;line-height:1.25;margin:12px 0 16px;color:var(--ink)}
+.preResultText{color:var(--muted);font-size:15px;line-height:1.6;margin-bottom:18px}
+.preResultActions{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+
+.pricingGrid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:40px;align-items:stretch}
+.priceCard{position:relative;display:flex;flex-direction:column}
+.priceCard.featured{border:2px solid var(--green);box-shadow:0 25px 60px #1c9b6b22}
+.popularRibbon{position:absolute;top:-13px;right:24px;background:var(--green);color:#fff;font-size:11px;font-weight:900;letter-spacing:1px;padding:6px 14px;border-radius:99px}
+.planKicker{font-size:11px;font-weight:900;letter-spacing:1.5px;color:var(--muted);margin-bottom:8px}
+.priceCard h3{font-size:22px;margin:0 0 12px;letter-spacing:-.5px}
+.featuredBtn{background:var(--green)!important}
+.featuredBtn:hover{background:#157b55!important}
+.whatsappHelpBox{background:#e7f8ef;border:1px solid #bce9d3;border-radius:12px;padding:18px;margin:24px 0 16px;font-size:14px;line-height:1.5;color:#065f46}
+
+@media(max-width:850px){
+  .preSection{grid-template-columns:1fr;padding:60px 0;gap:40px}
+  .pricingGrid{grid-template-columns:1fr;gap:35px}
+}
+

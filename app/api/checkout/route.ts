@@ -26,6 +26,25 @@ function integrationIdentifier() {
 export async function POST(request: Request) {
   const origin = SITE_ORIGIN;
   if (!isAllowedCheckoutOrigin(request)) return new Response("Forbidden", { status: 403 });
+
+  let plan = "basic";
+  try {
+    const contentType = request.headers.get("content-type") || "";
+    if (contentType.includes("application/x-www-form-urlencoded") || contentType.includes("multipart/form-data")) {
+      const formData = await request.clone().formData();
+      const submittedPlan = formData.get("plan");
+      if (submittedPlan === "premium") {
+        plan = "premium";
+      }
+    }
+  } catch {}
+
+  const isPremium = plan === "premium";
+  const productName = isPremium ? "Wi-Fi Doktor KOMPLET + SOS Asistence" : "Wi-Fi Doktor";
+  const productDescription = isPremium
+    ? "Doživotní přístup k interaktivnímu průvodci + osobní SOS posouzení technikem na WhatsAppu do 24 hod"
+    : "Jednorázový přístup k interaktivnímu průvodci domácí Wi-Fi";
+
   try {
     const session = await getStripeClient().checkout.sessions.create({
       mode: "payment",
@@ -34,9 +53,10 @@ export async function POST(request: Request) {
         price_data: {
           currency: "czk",
           unit_amount: 29900,
+          ...(isPremium ? { unit_amount: 59000 } : {}),
           product_data: {
-            name: "Wi-Fi Doktor",
-            description: "Jednorázový přístup k interaktivnímu průvodci domácí Wi-Fi",
+            name: productName,
+            description: productDescription,
           },
         },
         quantity: 1,
@@ -45,7 +65,7 @@ export async function POST(request: Request) {
       billing_address_collection: "auto",
       success_url: `${origin}/objednavka/uspech?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/?checkout=cancelled#objednat`,
-      metadata: { product: "wifi-doktor", access: "one-time" },
+      metadata: { product: "wifi-doktor", tier: plan, access: "one-time" },
     });
     if (!session.url) throw new Error("Stripe did not return a Checkout URL.");
     await getDb().insert(orders).values({

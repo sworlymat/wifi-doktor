@@ -23,7 +23,7 @@ export async function POST(request: Request) {
 
   if (event.type === "checkout.session.completed" || event.type === "checkout.session.async_payment_succeeded") {
     const session = event.data.object;
-    if (session.payment_status === "paid" && session.metadata?.product === "wifi-doktor" && session.mode === "payment" && session.amount_total === 29900 && session.currency === "czk") {
+    if (session.payment_status === "paid" && session.metadata?.product === "wifi-doktor" && session.mode === "payment" && (session.amount_total === 29900 || session.amount_total === 59000) && session.currency === "czk") {
       const values = {
         checkoutSessionId: session.id,
         product: "wifi-doktor",
