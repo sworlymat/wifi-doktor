@@ -7,7 +7,7 @@ export async function generateMetadata() {
     openGraph: { url: SITE_ORIGIN + "/", locale: "cs_CZ", type: "website" },
   };
 }
-export default async function Page({searchParams}:{searchParams:Promise<{checkout?:string}>}) {
+export default async function Page({searchParams}:{searchParams:Promise<{checkout?:string;reason?:string}>}) {
   const {checkout} = await searchParams;
-  return <Home checkout={checkout} prediagnosticEnabled={process.env.PREDIAGNOSTIC_ENABLED !== "false"}/>;
+  return <Home checkout={checkout}/>;
 }

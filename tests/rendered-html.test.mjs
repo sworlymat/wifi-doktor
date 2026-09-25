@@ -50,23 +50,20 @@ test("all public pages render; private guide is denied without payment and is no
   }
 });
 
-test("prediagnostic can be disabled without removing the original checkout", async () => {
-  const original = process.env.PREDIAGNOSTIC_ENABLED;
-  try {
-    process.env.PREDIAGNOSTIC_ENABLED = "false";
-    const disabled = await (await render()).text();
-    assert.doesNotMatch(disabled, /id="prediagnostika"/);
-    assert.match(disabled, /Koupit bezpečně přes Stripe/);
-    process.env.PREDIAGNOSTIC_ENABLED = "true";
-    assert.match(await (await render()).text(), /id="prediagnostika"/);
-  } finally {
-    if (original === undefined) delete process.env.PREDIAGNOSTIC_ENABLED;
-    else process.env.PREDIAGNOSTIC_ENABLED = original;
-  }
+test("four-question free prediagnostic and both lifetime plans are rendered", async () => {
+  const html = await (await render()).text();
+  assert.match(html, /id="prediagnostika"/);
+  assert.match(html, /id="prediagnostika"/);
+  assert.match(html, /OTÁZKA/);
+  assert.match(html, /Doživotní přístup · jednorázová platba/);
+  assert.match(html, /Doživotní přístup \+ SOS podpora/);
+  assert.match(html, /name="plan" value="basic"/);
+  assert.match(html, /name="plan" value="premium"/);
+  assert.match(html, /Koupit bezpečně přes Stripe/);
 });
 
 test("cancelled and failed checkout show an explanation instead of silently returning home", async () => {
-  assert.match(await (await render("/?checkout=error")).text(), /Platbu se nepodařilo připravit/);
+  assert.match(await (await render("/?checkout=error")).text(), /Stripe se nepodařilo otevřít/);
   assert.match(await (await render("/?checkout=cancelled")).text(), /Platba byla přerušena/);
 });
 
@@ -77,6 +74,7 @@ test("checkout keeps price and credentials server-side", async () => {
     readFile(new URL("../app/api/stripe/webhook/route.ts", import.meta.url), "utf8"),
   ]);
   assert.match(checkout, /unit_amount:\s*29900/);
+  assert.match(checkout, /unit_amount:\s*59000/);
   assert.match(checkout, /mode:\s*"payment"/);
   assert.doesNotMatch(checkout, /payment_method_types/);
   assert.match(stripe, /process\.env\.STRIPE_RESTRICTED_KEY/);

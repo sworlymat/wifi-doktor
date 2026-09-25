@@ -31,6 +31,25 @@ function database() {
   return {sqlite,db:drizzle(d1)};
 }
 const session = {id:"cs_test_fixture",object:"checkout.session",mode:"payment",status:"complete",payment_status:"paid",amount_total:29900,currency:"czk",metadata:{product:"wifi-doktor"},customer_details:{email:"fixture@example.com"},customer:null,payment_intent:null};
+test("checkout redirects into Stripe even when optional order pre-registration fails", async () => {
+  const created=[];
+  const {POST}=load("app/api/checkout/route.ts",{
+    "../../../lib/stripe":{getStripeClient:()=>({checkout:{sessions:{create:async options=>{created.push(options);return {id:"cs_test_checkout",url:"https://checkout.stripe.com/c/pay/session",amount_total:options.line_items[0].price_data.unit_amount,currency:"czk"};}}}})},
+    "../../../db":{getDb:()=>({insert:()=>({values:()=>({onConflictDoNothing:async()=>{throw new Error("database unavailable");}})})})},
+    "../../../db/schema":{orders:{}},
+    "../../../lib/site":{SITE_ORIGIN:"https://wifi-doktor.com"},
+  });
+  for (const [plan,amount] of [["basic",29900],["premium",59000]]) {
+    const response=await POST(new Request("https://wifi-doktor.com/api/checkout",{
+      method:"POST",headers:{origin:"https://wifi-doktor.com","content-type":"application/x-www-form-urlencoded"},body:new URLSearchParams({plan}),
+    }));
+    assert.equal(response.status,303);
+    assert.equal(response.headers.get("location"),"https://checkout.stripe.com/c/pay/session");
+    assert.equal(created.at(-1).line_items[0].price_data.unit_amount,amount);
+    assert.equal(created.at(-1).metadata.tier,plan);
+    assert.match(created.at(-1).line_items[0].price_data.product_data.description,/Doživotní přístup/);
+  }
+});
 test("access distinguishes payment states, invalid input and Stripe outages", async () => {
   let value=session;
   let calls=0;
