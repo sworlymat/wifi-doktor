@@ -43,6 +43,7 @@ export type ScreenDef = {
   title: string;
   sub?: string;
   boxes?: AlertBox[];
+  boxes2?: AlertBox[];
   steps?: StepItem[];
   options?: OptionItem[];
   grid2?: MiniCard[];
