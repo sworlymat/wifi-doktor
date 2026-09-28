@@ -24,7 +24,7 @@ a:focus-visible,button:focus-visible{outline:3px solid #1c9b6b;outline-offset:4p
 .priceComparison th,.priceComparison td{padding:17px 20px;border-bottom:1px solid var(--line);vertical-align:middle}
 .priceComparison thead th{width:30%;padding:28px 24px 24px;background:#fff;text-align:center;vertical-align:top}
 .priceComparison thead .comparisonFeatureHead{width:40%;text-align:left;vertical-align:bottom;font-size:14px;color:var(--muted)}
-.priceComparison h3{font-size:21px;line-height:1.25;margin:12px 0 8px}
+.priceComparison h3{font-size:21px;line-height:1.25;min-height:52px;margin:12px 0 8px;display:flex;align-items:center;justify-content:center}
 .comparisonPrice{font-size:48px;font-weight:900;letter-spacing:-2px;line-height:1;margin:16px 0 8px}
 .comparisonPrice span{font-size:18px;letter-spacing:0}
 .comparisonTerm{font-size:12px;line-height:1.45;color:var(--muted);margin:0}
@@ -33,11 +33,12 @@ a:focus-visible,button:focus-visible{outline:3px solid #1c9b6b;outline-offset:4p
 .priceComparison tbody tr:last-child th,.priceComparison tbody tr:last-child td,.priceComparison tfoot th,.priceComparison tfoot td{border-bottom:0}
 .priceComparison .comparisonFeatured{background:#f0faf5}
 .priceComparison thead .comparisonFeatured{border-top:3px solid var(--green)}
-.priceComparison .popularRibbon{position:static;display:inline-block;margin-bottom:16px}
+.priceComparison .comparisonBadgeSlot{height:32px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.priceComparison .popularRibbon{position:static;display:inline-block;margin:0}
 .priceComparison form{margin:0}
 .comparisonButton{display:flex;justify-content:center;align-items:center;width:100%;min-height:54px;padding:13px 16px;border-radius:10px;font-size:14px;line-height:1.3;text-align:center}
 .comparisonNote{margin:0;padding:16px 22px 20px;text-align:center;color:var(--muted);font-size:12px;line-height:1.5}
-@media(max-width:650px){.pricingComparisonWrap{margin-top:30px;border-radius:15px}.priceComparison th,.priceComparison td{padding:13px 9px}.priceComparison thead th{padding:22px 10px 18px}.priceComparison thead .comparisonFeatureHead{font-size:12px}.priceComparison h3{font-size:15px}.priceComparison tbody th,.priceComparison tfoot th{font-size:12px}.priceComparison tbody td{font-size:18px}.comparisonPrice{font-size:34px}.comparisonPrice span{font-size:14px}.comparisonTerm{font-size:10px}.priceComparison .popularRibbon{font-size:8px;letter-spacing:.4px;padding:6px 8px;margin-bottom:12px}.comparisonButton{font-size:11px;padding:11px 7px;min-height:48px}.comparisonNote{font-size:11px;padding:14px}}
+@media(max-width:650px){.pricingComparisonWrap{margin-top:30px;border-radius:15px}.priceComparison th,.priceComparison td{padding:13px 9px}.priceComparison thead th{padding:22px 10px 18px}.priceComparison thead .comparisonFeatureHead{font-size:12px}.priceComparison h3{font-size:15px;min-height:40px}.priceComparison tbody th,.priceComparison tfoot th{font-size:12px}.priceComparison tbody td{font-size:18px}.comparisonPrice{font-size:34px}.comparisonPrice span{font-size:14px}.comparisonTerm{font-size:10px}.priceComparison .comparisonBadgeSlot{height:27px;margin-bottom:10px}.priceComparison .popularRibbon{font-size:8px;letter-spacing:.4px;padding:6px 8px}.comparisonButton{font-size:11px;padding:11px 7px;min-height:48px}.comparisonNote{font-size:11px;padding:14px}}
 .faqItem h3{font-size:19px;line-height:1.35;margin:0 0 10px}
 .faqItem p{line-height:1.65;padding:0 40px 0 0}
 @media(max-width:650px){.faqItem p{padding-right:0}}
