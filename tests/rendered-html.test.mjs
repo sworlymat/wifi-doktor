@@ -19,13 +19,13 @@ test("server-renders the Wi-Fi Doktor sales page and Stripe checkout form", asyn
   assert.match(html, /<title>Wi‑Fi Doktor/);
   assert.match(html, /Opravte ji sami/);
   assert.match(html, /action="\/api\/checkout" method="post"/);
-  assert.match(html, /Koupit bezpečně přes Stripe/);
+  assert.match(html, /Získat Základ · 299 Kč/);
   assert.match(html, /299/);
   assert.match(html, /Vše důležité bez rozklikávání/);
   assert.match(html, /Co přesně po zaplacení dostanu/);
   assert.match(html, /Jak rychle získám přístup/);
   assert.match(html, /žádná další pravidelná platba se nestrhává/);
-  assert.match(html, /100% garance vrácení peněz/);
+  assert.match(html, /14denní garance vrácení peněz/);
   assert.match(html, /KROK 1/);
   assert.match(html, /14denní garance vrácení peněz/);
   assert.doesNotMatch(html, /sk_(test|live)_|rk_(test|live)_/);
@@ -56,10 +56,15 @@ test("four-question free prediagnostic and both lifetime plans are rendered", as
   assert.match(html, /id="prediagnostika"/);
   assert.match(html, /OTÁZKA/);
   assert.match(html, /Doživotní přístup · jednorázová platba/);
-  assert.match(html, /Doživotní přístup \+ SOS podpora/);
+  assert.match(html, /SOS asistence přes WhatsApp nebo e‑mail/);
   assert.match(html, /name="plan" value="basic"/);
   assert.match(html, /name="plan" value="premium"/);
-  assert.match(html, /Koupit bezpečně přes Stripe/);
+  assert.match(html, /Získat Základ · 299 Kč/);
+  assert.match(html, /class="priceComparison"/);
+  assert.match(html, /Co získáte/);
+  assert.match(html, /Základ · 299 Kč/);
+  assert.match(html, /Komplet · 590 Kč/);
+  assert.equal((html.match(/name="plan" value="(?:basic|premium)"/g) ?? []).length, 3);
 });
 
 test("cancelled and failed checkout show an explanation instead of silently returning home", async () => {
