@@ -42,8 +42,8 @@ export async function POST(request: Request) {
   const isPremium = plan === "premium";
   const productName = isPremium ? "Wi-Fi Doktor KOMPLET + SOS Asistence" : "Wi-Fi Doktor";
   const productDescription = isPremium
-    ? "Doživotní přístup k interaktivnímu průvodci + osobní SOS posouzení technikem na WhatsAppu do 24 hod"
-    : "Jednorázový přístup k interaktivnímu průvodci domácí Wi-Fi";
+    ? "Doživotní přístup k interaktivnímu průvodci + osobní SOS posouzení technikem na WhatsAppu do 24 hod. Přístup ihned po zaplacení, odkaz také na e-mail."
+    : "Doživotní přístup k interaktivnímu průvodci domácí Wi-Fi. Přístup ihned po zaplacení, odkaz také na e-mail.";
 
   try {
     const session = await getStripeClient().checkout.sessions.create({
@@ -68,17 +68,25 @@ export async function POST(request: Request) {
       metadata: { product: "wifi-doktor", tier: plan, access: "one-time" },
     });
     if (!session.url) throw new Error("Stripe did not return a Checkout URL.");
-    await getDb().insert(orders).values({
-      checkoutSessionId: session.id,
-      product: "wifi-doktor",
-      amountTotal: session.amount_total ?? 29900,
-      currency: session.currency ?? "czk",
-      customerEmail: session.customer_details?.email ?? null,
-      stripeCustomerId: typeof session.customer === "string" ? session.customer : null,
-    }).onConflictDoNothing();
+    try {
+      await getDb().insert(orders).values({
+        checkoutSessionId: session.id,
+        product: "wifi-doktor",
+        amountTotal: session.amount_total ?? (isPremium ? 59000 : 29900),
+        currency: session.currency ?? "czk",
+        customerEmail: session.customer_details?.email ?? null,
+        stripeCustomerId: typeof session.customer === "string" ? session.customer : null,
+      }).onConflictDoNothing();
+    } catch (error) {
+      console.error("Unable to pre-register checkout order", { type: error instanceof Error ? error.name : "Unknown error" });
+    }
     return Response.redirect(session.url, 303);
   } catch (error) {
-    console.error("Unable to create Stripe Checkout Session", { type: error instanceof Error ? error.name : "Unknown error" });
-    return Response.redirect(`${origin}/?checkout=error#objednat`, 303);
+    const type = error instanceof Error ? error.name : "Unknown error";
+    const code = error && typeof error === "object" && "code" in error && typeof error.code === "string"
+      ? error.code.slice(0, 48)
+      : type;
+    console.error("Unable to create Stripe Checkout Session", { type, code });
+    return Response.redirect(`${origin}/?checkout=error&reason=${encodeURIComponent(code)}#objednat`, 303);
   }
 }

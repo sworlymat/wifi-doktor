@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+export const metadata = { title: 'Ochrana soukromí | Wi-Fi Doktor', alternates: { canonical: 'https://wifi-doktor.com/ochrana-soukromi' } };
+
 const CONTACT_EMAIL = "pepik.kup@gmail.com";
 
 export default function Privacy() {
@@ -70,7 +72,11 @@ export default function Privacy() {
           potřebují lepší vysvětlení, a po vyhodnocení je odstraníme.
         </p>
 
-        <p>Tyto informace jsou účinné od 16. září 2026.</p>
+        <h2>Google Analytics se souhlasem</h2>
+        <p>Pokud povolíte analytiku, používáme také Google Analytics 4 od společnosti Google pro statistiky návštěvnosti a používání webu. Google může ukládat analytické cookies a zpracovávat online identifikátory, technické údaje prohlížeče a interakce s veřejnými stránkami. Tyto údaje mohou být zpracovávány i mimo Evropský hospodářský prostor podle podmínek a záruk společnosti Google. Reklamní personalizaci a Google Signals nezapínáme.</p>
+        <p>Google Analytics se před souhlasem nenačítá. Naše implementace mu neposílá e-mail, odpovědi v průvodci ani osobní přístupové odkazy. Měření nezapínáme v placeném průvodci a na potvrzení objednávky. Základní vlastní měření popsané výše je samostatné.</p>
+        <p>Volbu ukládáme v tomto prohlížeči na 180 dní. Souhlas můžete odmítnout nebo odvolat tlačítkem „Nastavení měření“. Odvolání zastaví další měření a odstraní dostupné cookies Google Analytics; již dříve odeslaná data tím nejsou automaticky smazána. Více: <a href="https://policies.google.com/privacy">zásady ochrany soukromí Google</a>.</p>
+        <p>Tyto informace jsou účinné od 22. září 2026.</p>
       </article>
     </main>
   );

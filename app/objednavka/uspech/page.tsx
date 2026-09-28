@@ -18,7 +18,7 @@ export default async function OrderSuccess({ searchParams }: { searchParams: Pro
       <p className="eyebrow"><span/> Platba ověřena · {isPremium ? "Kompletní balíček s asistencí" : "Základní balíček"}</p>
       <h1>Děkujeme za objednávku.</h1>
       <p>Platba proběhla úspěšně{email ? <> pro objednávku na <strong>{email}</strong></> : null}.</p>
-      <p className="resultNote">Váš průvodce je připravený. Uložte si jeho adresu do záložek — je to váš osobní přístup, který nesdílejte s ostatními.</p>
+      <p className="resultNote">Váš doživotní přístup je připravený a průvodce můžete otevřít ihned. Odkaz vám pošleme také na e-mail zadaný při platbě. Uložte si adresu do záložek — je to váš osobní přístup, který nesdílejte s ostatními.</p>
       {isPremium ? (
         <div className="whatsappHelpBox">
           <p><strong>📱 Vaše SOS asistence technika je aktivní</strong></p>

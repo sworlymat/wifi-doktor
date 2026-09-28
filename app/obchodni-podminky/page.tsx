@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+export const metadata = { title: 'Obchodní podmínky | Wi-Fi Doktor', alternates: { canonical: 'https://wifi-doktor.com/obchodni-podminky' } };
+
 const CONTACT_EMAIL = "pepik.kup@gmail.com";
 
 export default function Terms() {
@@ -21,7 +23,7 @@ export default function Terms() {
         <h2>Produkt a cena</h2>
         <p>
           Wi‑Fi Doktor je digitální interaktivní průvodce pro řešení běžných problémů
-          domácí Wi‑Fi. Cena jednorázového přístupu je 299 Kč. Nejde o předplatné.
+          domácí Wi‑Fi. Cena doživotního přístupu je 299 Kč, hrazených jednorázově. Přístup nemá časové omezení. Nejde o předplatné.
           Konečná cena je zákazníkovi zobrazena před odesláním platby.
         </p>
 
@@ -34,8 +36,8 @@ export default function Terms() {
 
         <h2>Doručení</h2>
         <p>
-          Přístup je zpřístupněn po úspěšném ověření platby na potvrzovací stránce.
-          Odkaz na přístup může být zaslán také na e-mail uvedený zákazníkem při platbě.
+          Přístup je zpřístupněn ihned po úspěšném ověření platby na potvrzovací stránce.
+          Odkaz na přístup je zaslán také na e-mail uvedený zákazníkem při platbě.
           Pokud odkaz po zaplacení nefunguje, zákazník kontaktuje prodávajícího na
           e-mailu <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> a uvede e-mail
           použitý při objednávce.
