@@ -37,8 +37,14 @@ export function startGoogleAnalytics(path: string) {
 function safeReferrer() { try { return document.referrer ? new URL(document.referrer).origin : ""; } catch { return ""; } }
 export function googleEvent(name: string) {
   if (!enabled || !publicAnalyticsPage(window.location.pathname)) return;
-  if (!/^(prediagnostic_(started|step_[123]|completed|result_[ABCDE])|basic_cta_clicked|checkout_start)$/.test(name)) return;
-  (window as unknown as GoogleWindow).gtag?.("event", name === "checkout_start" ? "begin_checkout" : name, { page_location: window.location.origin + window.location.pathname, ...(name === "checkout_start" ? {currency:"CZK",value:299} : {}) });
+  if (!/^(prediagnostic_(started|step_[123]|completed|result_[ABCDE])|basic_cta_clicked|checkout_start(_(basic|premium))?)$/.test(name)) return;
+  const isCheckout = name.startsWith("checkout_start");
+  const plan = name.endsWith("premium") ? "premium" : "basic";
+  const value = plan === "premium" ? 590 : 299;
+  (window as unknown as GoogleWindow).gtag?.("event", isCheckout ? "begin_checkout" : name, {
+    page_location: window.location.origin + window.location.pathname,
+    ...(isCheckout ? { currency: "CZK", value, items: [{ item_id: plan, item_name: plan === "premium" ? "Wi-Fi Doktor Komplet" : "Wi-Fi Doktor Základ", price: value, quantity: 1 }] } : {}),
+  });
 }
 export function clearGoogleCookies() {
   for (const part of document.cookie.split(";")) {
@@ -49,4 +55,3 @@ export function clearGoogleCookies() {
     for (let i=0; i<labels.length-1; i++) document.cookie = `${base}; domain=${labels.slice(i).join(".")}`;
   }
 }
-

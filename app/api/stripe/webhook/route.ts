@@ -94,6 +94,7 @@ export async function POST(request: Request) {
           to: values.customerEmail,
           accessUrl: `${origin}/pruvodce?session_id=${encodeURIComponent(session.id)}`,
           checkoutSessionId: session.id,
+          amountTotal: values.amountTotal,
         });
         if (sent) await db.update(orders).set({orderEmailSentAt:sql<string>`CURRENT_TIMESTAMP`,updatedAt:sql<string>`CURRENT_TIMESTAMP`}).where(eq(orders.checkoutSessionId,session.id));
       }

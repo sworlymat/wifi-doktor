@@ -50,6 +50,28 @@ test("checkout redirects into Stripe even when optional order pre-registration f
     assert.match(created.at(-1).line_items[0].price_data.product_data.description,/Doživotní přístup/);
   }
 });
+test("order email confirms the correct plan amount and premium assistance", async () => {
+  const previousKey = process.env.RESEND_API_KEY;
+  const previousFrom = process.env.ORDER_FROM_EMAIL;
+  const previousFetch = globalThis.fetch;
+  process.env.RESEND_API_KEY = "fixture-only";
+  process.env.ORDER_FROM_EMAIL = "Wi-Fi Doktor <podpora@wifi-doktor.com>";
+  const messages = [];
+  globalThis.fetch = async (_url, options) => { messages.push(JSON.parse(options.body)); return new Response(null, { status: 200 }); };
+  const {sendOrderEmail} = load("lib/email.ts");
+  try {
+    await sendOrderEmail({to:"customer@example.com",accessUrl:"https://wifi-doktor.com/pruvodce?session_id=cs_test_basic",checkoutSessionId:"cs_test_basic",amountTotal:29900});
+    await sendOrderEmail({to:"customer@example.com",accessUrl:"https://wifi-doktor.com/pruvodce?session_id=cs_test_premium",checkoutSessionId:"cs_test_premium",amountTotal:59000});
+    assert.match(messages[0].text, /299 Kč/);
+    assert.match(messages[1].text, /590 Kč/);
+    assert.doesNotMatch(messages[1].text, /299 Kč/);
+    assert.match(messages[1].text, /SOS asistence technika přes WhatsApp/);
+  } finally {
+    globalThis.fetch = previousFetch;
+    if(previousKey===undefined)delete process.env.RESEND_API_KEY;else process.env.RESEND_API_KEY=previousKey;
+    if(previousFrom===undefined)delete process.env.ORDER_FROM_EMAIL;else process.env.ORDER_FROM_EMAIL=previousFrom;
+  }
+});
 test("access distinguishes payment states, invalid input and Stripe outages", async () => {
   let value=session;
   let calls=0;

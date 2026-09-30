@@ -9,7 +9,7 @@ test('free prediagnostic asks four questions, shows a result, and can restart',(
  const states=[];let cursor=0;
  const exports={};
  const code=ts.transpileModule(readFileSync(new URL('../app/Home.tsx',import.meta.url),'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.ReactJSX}}).outputText;
- new Function('require','exports',code)(id=>id==='react'?{useEffect(){},useState(initial){const i=cursor++;if(!(i in states))states[i]=initial;return [states[i],v=>{states[i]=typeof v==='function'?v(states[i]):v;}];}}:require(id),exports);
+ new Function('require','exports',code)(id=>id==='react'?{useEffect(){},useState(initial){const i=cursor++;if(!(i in states))states[i]=initial;return [states[i],v=>{states[i]=typeof v==='function'?v(states[i]):v;}];}}:id==='../lib/google-analytics'?{googleEvent(){}}:require(id),exports);
  function render(){cursor=0;return exports.default({});}
  function nodes(v){if(v==null||typeof v==='boolean')return [];if(Array.isArray(v))return v.flatMap(nodes);return [v,...(v.props?nodes(v.props.children):[])];}
  function text(v){return nodes(v).filter(x=>typeof x==='string'||typeof x==='number').join(' ');}

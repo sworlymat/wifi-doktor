@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { googleEvent } from "../lib/google-analytics";
 const pains=[["Wi‑Fi je pomalá","Stránky se načítají věčnost a video se seká."],["Připojení vypadává","Telefon nebo televize se pořád odpojují."],["Signál nedosáhne všude","V ložnici, patře nebo na zahradě Wi‑Fi mizí."],["Zlobí jen jedno zařízení","Ostatní fungují, ale jeden telefon či notebook ne."]];
 const steps=[["01","Vyberete, co nefunguje","Žádná učebnice. Začnete rovnou svým problémem."],["02","Projdete doporučené kontroly","Průvodce rozliší Wi‑Fi, internet, pokrytí i konkrétní zařízení."],["03","Uděláte jeden bezpečný krok","Dostanete konkrétní pokyn a popis, jak ověřit výsledek."],["04","Ověříte výsledek","Teprve když krok nepomohl, pokračujete dál."]];
 const faqs=[
@@ -93,7 +94,7 @@ export default function Home({checkout}:{checkout?:string}){
   const updateScroll=()=>{const available=document.documentElement.scrollHeight-window.innerHeight;maxScrollDepth=available<=0?100:Math.max(maxScrollDepth,Math.min(100,Math.round(window.scrollY/available*100)));};
   window.addEventListener("scroll",updateScroll,{passive:true});
   const checkoutForms=[...document.querySelectorAll<HTMLFormElement>('form[data-analytics="checkout-start"]')];
-  const checkoutStarted=()=>send("checkout_start",{section:"objednat"},true);
+  const checkoutStarted=(event:Event)=>{const form=event.currentTarget as HTMLFormElement;const plan=new FormData(form).get("plan")==="premium"?"premium":"basic";send(`checkout_start_${plan}`,{section:"objednat"},true);googleEvent(`checkout_start_${plan}`);};
   checkoutForms.forEach(form=>form.addEventListener("submit",checkoutStarted));
   const sendExit=()=>{if(exitSent)return;exitSent=true;updateScroll();send("page_exit",{section:lastSection,durationMs:Date.now()-startedAt,scrollDepth:maxScrollDepth},true);};
   window.addEventListener("pagehide",sendExit);
