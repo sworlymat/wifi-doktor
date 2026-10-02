@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export const metadata = { title: 'Obchodní podmínky | Wi-Fi Doktor', alternates: { canonical: 'https://wifi-doktor.com/obchodni-podminky' } };
 
-const CONTACT_EMAIL = "pepik.kup@gmail.com";
+const CONTACT_EMAIL = "podpora@wifi-doktor.com";
 
 export default function Terms() {
   return (
@@ -23,7 +23,7 @@ export default function Terms() {
         <h2>Produkt a cena</h2>
         <p>
           Wi‑Fi Doktor je digitální interaktivní průvodce pro řešení běžných problémů
-          domácí Wi‑Fi. Cena doživotního přístupu je 299 Kč, hrazených jednorázově. Přístup nemá časové omezení. Nejde o předplatné.
+          domácí Wi‑Fi. Základní balíček stojí 299 Kč a kompletní balíček 590 Kč. Obě ceny se hradí jednorázově; přístup nemá časové omezení a nejde o předplatné.
           Konečná cena je zákazníkovi zobrazena před odesláním platby.
         </p>
 

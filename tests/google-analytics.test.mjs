@@ -19,6 +19,9 @@ test('GA loads once, redacts URL parameters, emits only allowed events and stops
  assert.equal(a.scripts.length,1);assert.match(a.scripts[0].src,/G-C82SCYPJR0/);
  assert.equal(a.events().filter(x=>x[1]==='page_view').length,1);
  a.api.googleEvent('checkout_start');assert.equal(a.events().at(-1)[1],'begin_checkout');
+ a.api.googleEvent('checkout_start_basic');assert.equal(a.events().at(-1)[2].value,299);
+ a.api.googleEvent('checkout_start_premium');assert.equal(a.events().at(-1)[1],'begin_checkout');assert.equal(a.events().at(-1)[2].value,590);
+ assert.equal(a.events().at(-1)[2].items[0].item_id,'premium');
  const n=a.events().length;a.api.googleEvent('email');assert.equal(a.events().length,n);
  assert.doesNotMatch(JSON.stringify(a.events()),/secret|hidden|token/);
  a.api.stopGoogleAnalytics();a.api.googleEvent('checkout_start');assert.equal(a.events().length,n);assert.equal(a.w['ga-disable-G-C82SCYPJR0'],true);
