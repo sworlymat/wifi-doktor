@@ -17,7 +17,7 @@ test("server-renders the Wi-Fi Doktor sales page and Stripe checkout form", asyn
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
   const html = await response.text();
   assert.match(html, /<title>Wi‑Fi Doktor/);
-  assert.match(html, /Opravte ji sami/);
+  assert.match(html, /Vraťte domů klid/);
   assert.match(html, /action="\/api\/checkout" method="post"/);
   assert.match(html, /Získat Základ · 299 Kč/);
   assert.match(html, /299/);
