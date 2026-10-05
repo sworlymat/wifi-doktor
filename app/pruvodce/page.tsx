@@ -1,5 +1,5 @@
 import { verifyAccess } from "../../lib/access";
-import Guide from "./Guide";
+import CustomerGuide from "./CustomerGuide";
 
 export const dynamic = "force-dynamic";
 export const metadata = { robots: { index: false, follow: false } };
@@ -12,11 +12,5 @@ export default async function GuidePage({searchParams}:{searchParams:Promise<{se
 
   const isPremium = Boolean(result.isPremium);
 
-  return <main className="guidePage">
-    <header className="guideHeader">
-      <a className="brand" href="/"><span className="brandMark">W</span><span>Wi‑Fi Doktor</span></a>
-      <span>{isPremium ? "⭐ Zakoupený přístup s asistencí" : "Zakoupený přístup"}</span>
-    </header>
-    <Guide isPremium={isPremium}/>
-  </main>;
+  return <CustomerGuide premium={isPremium}/>;
 }
