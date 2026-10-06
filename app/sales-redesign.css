@@ -10,3 +10,21 @@
 /* Srovnání balíčků: společná struktura, výraznější osobní podpora. */
 .salesRedesign .pricing-grid{gap:28px;align-items:stretch}.salesRedesign .price-card{padding:34px;border-radius:22px;background:#131b16;border-color:#ffffff30}.salesRedesign .price-card.featured{background:linear-gradient(135deg,#28391c,#162218);border:2px solid var(--lime);padding:33px;box-shadow:0 16px 50px #0002}.salesRedesign .package-heading{display:flex;gap:13px;align-items:center;margin-bottom:24px;min-height:47px}.salesRedesign .package-heading .eyebrow{margin:0;color:#c0cbb7;font-size:12px;letter-spacing:1.2px}.salesRedesign .package-icon{width:47px;height:47px;border-radius:13px;background:#ffffff0c;border:1px solid #ffffff15;color:#d8e4cd;display:grid;place-items:center;flex-shrink:0}.salesRedesign .package-icon svg{width:25px;height:25px}.salesRedesign .featured .package-icon{background:#d5ff4318;color:var(--lime);border-color:#d5ff4333}.salesRedesign .price-card h3{font-size:28px;line-height:1.15;margin-bottom:14px}.salesRedesign .price-card .package-intro{min-height:48px;margin-bottom:18px;font-size:16px!important;line-height:1.5}.salesRedesign .price-card .price{font-size:68px;font-variant-numeric:tabular-nums;line-height:1.1}.salesRedesign .price-card .payment-note{margin-top:12px;margin-bottom:14px!important}.salesRedesign .price-card .price-guarantee{background:#d5ff430b;border:1px solid #d5ff4322;border-radius:9px;padding:10px 12px;margin-bottom:12px!important}.salesRedesign .price-card .button{margin-top:0;min-height:56px}.salesRedesign .package-benefit{margin-top:26px;padding:18px 0 0;border-top:1px solid var(--line);min-height:95px}.salesRedesign .package-benefit span{display:block;font-size:12px;font-weight:700;letter-spacing:1px;color:#94a18c;margin-bottom:8px}.salesRedesign .package-benefit strong{font-size:16px;line-height:1.5;font-weight:600;display:block}.salesRedesign .featured .package-benefit span{color:var(--lime)}.salesRedesign .price-card .package-features{margin-top:20px;padding-top:19px}.salesRedesign .package-badge{right:25px;top:-15px;font-size:12px;letter-spacing:.6px;padding:6px 12px;border-radius:7px}
 @media(max-width:800px){.salesRedesign .price-card{padding:26px}.salesRedesign .price-card.featured{padding:25px}.salesRedesign .package-heading{margin-bottom:22px}.salesRedesign .price-card h3{font-size:26px}.salesRedesign .price-card .package-intro{min-height:0}.salesRedesign .price-card .price{font-size:60px}.salesRedesign .package-benefit{min-height:0}.salesRedesign .package-badge{right:20px;font-size:11px}.salesRedesign .pricing-grid{gap:32px}}
+
+/* Keep the hero example in a clear side column at tablet widths. */
+@media(min-width:801px) and (max-width:1100px){
+  .salesRedesign .hero-grid{grid-template-columns:minmax(0,1.35fr) minmax(340px,.9fr);gap:clamp(32px,4vw,44px);min-height:610px;padding-bottom:48px}
+  .salesRedesign .hero-copy{min-width:0}
+  .salesRedesign .hero-diagnostic{width:100%;max-width:420px;justify-self:end}
+  .salesRedesign .hero-bottom{position:relative;z-index:1;margin-top:0;padding:22px 0 26px;clear:both}
+}
+
+/* Make the refund guarantee distinct from the page background and easy to read. */
+.salesRedesign .guarantee{background:#1e2b22;color:#f6f5ef;border-color:#d5ff4355}
+.salesRedesign .guarantee h3{color:#f6f5ef}
+.salesRedesign .guarantee p{color:#d7dfd7}
+.salesRedesign .guarantee a{color:var(--lime);text-decoration:underline;text-underline-offset:3px}
+.salesRedesign .hero-grid{grid-template-columns:minmax(0,1fr) minmax(360px,420px);gap:clamp(32px,5vw,64px)}
+@media(max-width:1100px){.salesRedesign .hero-grid{grid-template-columns:minmax(0,1fr) minmax(340px,400px);gap:32px;min-height:610px}.salesRedesign .hero-diagnostic{max-width:400px}}
+.salesRedesign .hero{display:block;min-height:0;grid-template-columns:none;align-items:initial;gap:0}
+
