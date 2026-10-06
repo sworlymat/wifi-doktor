@@ -14,3 +14,4 @@ export default async function GuidePage({searchParams}:{searchParams:Promise<{se
 
   return <CustomerGuide premium={isPremium}/>;
 }
+
