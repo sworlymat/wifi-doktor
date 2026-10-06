@@ -19,15 +19,19 @@ test("server-renders the Wi-Fi Doktor sales page and Stripe checkout form", asyn
   assert.match(html, /<title>Wi‑Fi Doktor/);
   assert.match(html, /Vraťte domů klid/);
   assert.match(html, /action="\/api\/checkout" method="post"/);
-  assert.match(html, /Získat Základ · 299 Kč/);
+  assert.match(html, /Získat základní balíček/);
+  assert.match(html, /Zvolit kompletní balíček/);
+  assert.match(html, /name="plan" value="basic"/);
+  assert.match(html, /name="plan" value="premium"/);
   assert.match(html, /299/);
-  assert.match(html, /Vše důležité bez rozklikávání/);
+  assert.match(html, /Vše důležité\.<br>Bez složitostí/);
   assert.match(html, /Co přesně po zaplacení dostanu/);
-  assert.match(html, /Jak rychle získám přístup/);
-  assert.match(html, /žádná další pravidelná platba se nestrhává/);
+  assert.match(html, /Odkaz přijde také e-mailem/);
+  assert.match(html, /Doživotní přístup/);
   assert.match(html, /14denní garance vrácení peněz/);
-  assert.match(html, /KROK 1/);
-  assert.match(html, /14denní garance vrácení peněz/);
+  assert.match(html, /Čtyři krátké otázky/);
+  assert.match(html, /id="cena"/);
+  assert.match(html, /id="faq"/);
   assert.doesNotMatch(html, /sk_(test|live)_|rk_(test|live)_/);
 });
 
@@ -52,24 +56,35 @@ test("all public pages render; private guide is denied without payment and is no
 
 test("four-question free prediagnostic and both lifetime plans are rendered", async () => {
   const html = await (await render()).text();
-  assert.match(html, /id="prediagnostika"/);
-  assert.match(html, /id="prediagnostika"/);
+  assert.match(html, /id="diagnostika"/);
   assert.match(html, /OTÁZKA/);
-  assert.match(html, /Doživotní přístup · jednorázová platba/);
-  assert.match(html, /SOS asistence přes WhatsApp nebo e‑mail/);
+  assert.match(html, /Doživotní přístup/);
+  assert.match(html, /SOS asistence přes WhatsApp nebo e-mail/);
   assert.match(html, /name="plan" value="basic"/);
   assert.match(html, /name="plan" value="premium"/);
-  assert.match(html, /Získat Základ · 299 Kč/);
-  assert.match(html, /class="priceComparison"/);
-  assert.match(html, /Co získáte/);
-  assert.match(html, /Základ · 299 Kč/);
-  assert.match(html, /Komplet · 590 Kč/);
-  assert.equal((html.match(/name="plan" value="(?:basic|premium)"/g) ?? []).length, 3);
+  assert.match(html, /Získat základní balíček/);
+  assert.match(html, /Zvolit kompletní balíček/);
+  assert.match(html, /data-track-section/);
+  assert.equal((html.match(/name="plan" value="(?:basic|premium)"/g) ?? []).length, 2);
 });
 
 test("cancelled and failed checkout show an explanation instead of silently returning home", async () => {
-  assert.match(await (await render("/?checkout=error")).text(), /Stripe se nepodařilo otevřít/);
+  assert.match(await (await render("/?checkout=error")).text(), /Platbu se nepodařilo otevřít/);
   assert.match(await (await render("/?checkout=cancelled")).text(), /Platba byla přerušena/);
+});
+
+test("verified payment opens the correct lifetime guide tier", async () => {
+  const premium = await render("/pruvodce?session_id=cs_test_preview");
+  assert.equal(premium.status, 200);
+  assert.equal(premium.headers.get("cache-control"), "private, no-store");
+  const premiumHtml = await premium.text();
+  assert.match(premiumHtml, /S asistencí · 590 Kč/);
+  assert.match(premiumHtml, /Osobní SOS asistence technika/);
+  assert.match(premiumHtml, /wa\.me\/420775278813/);
+
+  const basicHtml = await (await render("/pruvodce?session_id=cs_test_preview_basic")).text();
+  assert.match(basicHtml, /Samostatně · 299 Kč/);
+  assert.doesNotMatch(basicHtml, /Osobní SOS asistence technika na WhatsAppu aktivní/);
 });
 
 test("checkout keeps price and credentials server-side", async () => {
@@ -137,3 +152,4 @@ test("SEO pages expose distinct canonicals and crawlable advice; private access 
   for (const path of paths) assert.ok(sitemap.includes(`https://wifi-doktor.com${path}</loc>`));
   assert.doesNotMatch(sitemap, /session_id|\/pruvodce|\/api\//);
 });
+
