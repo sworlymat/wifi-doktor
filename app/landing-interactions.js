@@ -1,3 +1,5 @@
+import { track } from "../lib/analytics";
+
 export function initializeLanding(){const controller=new AbortController();const listen=(target,type,handler)=>target.addEventListener(type,handler,{signal:controller.signal});
 const menu = document.querySelector('.menu-toggle');
 const navigation = document.getElementById('navigation');
@@ -10,7 +12,15 @@ const questions = [
  { title:'Je připojení těsně u routeru lepší?', choices:[['better','Ano, je znatelně lepší'],['same','Ne, problém zůstává'],['untested','Ještě jsem to nezkoušel/a']] },
  { title:'Funguje internet přes síťový kabel?', choices:[['works','Ano, přes kabel funguje dobře'],['bad','Ne, zlobí i přes kabel'],['nocable','Kabel nemám nebo nevím']] }
 ];
-let answers = []; let step = 0;
+let answers = []; let step = 0; let startedAt = 0; let completionSent = false;
+const countedSteps = new Set();
+const section = "prediagnostika";
+function beginQuiz(){startedAt=Date.now();completionSent=false;countedSteps.clear();track("prediagnostic_started",{section});}
+function recordStep(index){if(index<3){const event=`prediagnostic_step_${index+1}`;if(!countedSteps.has(event)){countedSteps.add(event);track(event,{section});}return;}
+ if(completionSent)return;completionSent=true;track("prediagnostic_completed",{section,durationMs:Date.now()-startedAt},true);
+ const result=answers[1]==="one"?"C":answers[3]==="bad"?"D":answers[2]==="better"?"A":answers[3]==="works"?"B":"E";
+ track(`prediagnostic_result_${result}`,{section},true);
+}
 const content = document.getElementById('quiz-content'), label = document.getElementById('quiz-label'), progress = document.getElementById('quiz-progress'), back = document.getElementById('quiz-back'), reset = document.getElementById('quiz-reset');
 function render(focus = false){
  back.hidden = step === 0 || step === questions.length; reset.hidden = step === 0;
@@ -19,7 +29,7 @@ function render(focus = false){
   label.textContent = `OTÁZKA ${step+1} ZE 4`;
   content.replaceChildren(); const title = document.createElement('h3'); title.textContent = questions[step].title; title.tabIndex = -1; content.append(title);
   const group = document.createElement('div'); group.className='quiz-options'; content.append(group);
-  for(const [value,text] of questions[step].choices){ const button = document.createElement('button'); button.textContent = text; listen(button,'click',()=>{answers[step]=value; step++; render(true);}); group.append(button); }
+  for(const [value,text] of questions[step].choices){ const button = document.createElement('button'); button.textContent = text; listen(button,'click',()=>{if(!startedAt)beginQuiz();const answeredStep=step;answers[answeredStep]=value;recordStep(answeredStep);step++;render(true);}); group.append(button); }
   if(focus) title.focus({preventScroll:true});
  }else{
   label.textContent = 'VAŠE ORIENTAČNÍ VYHODNOCENÍ';
@@ -33,7 +43,8 @@ function render(focus = false){
  }
 }
 listen(back,'click',()=>{if(step>0){step--;answers=answers.slice(0,step);render(true);}});
-listen(reset,'click',()=>{step=0;answers=[];render(true);});
-document.querySelectorAll('[data-problem]').forEach(button=>listen(button,'click',()=>{answers=[button.dataset.problem];step=1;render();document.getElementById('diagnostika').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}));
+listen(reset,'click',()=>{step=0;answers=[];startedAt=0;completionSent=false;countedSteps.clear();render(true);});
+document.querySelectorAll('[data-problem]').forEach(button=>listen(button,'click',()=>{beginQuiz();answers=[button.dataset.problem];recordStep(0);step=1;render();document.getElementById('diagnostika').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}));
 render();
 return()=>controller.abort();}
+
